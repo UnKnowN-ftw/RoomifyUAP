@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #f3c9ef, #a1c1f1);
+    background-size: cover;
+    background-position: center;
+}
+
+.container {
+    width: 380px;
+    margin: 40px auto;
+    backdrop-filter: blur(10px);
+    padding: 60px 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.logo {
+    display: block;
+    margin: 0 auto 20px;
+    align-content: center;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;    
+    font-size: 40px;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+}
+
+.tab-button {
+    padding: 12px 40px;
+    border: none;
+    background: #ecf0f1;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 10px;
+    transition: background 0.5s;
+}
+
+.tab-button.active {
+    background: #3498db;
+    color: white;
+}
+
+.option-button {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.5s;
+}
+
+.option-button:hover {
+    background: #2980b9;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin-bottom:12px;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #f000fd;
+    outline: none;
+}
+
+button[type="submit"] {
+    padding: 10px;
+    background: #2dc46c;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background: #219150;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.forgot-password {
+    color: #000000;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: rgb(84, 84, 84);
+    text-decoration: underline;
+}

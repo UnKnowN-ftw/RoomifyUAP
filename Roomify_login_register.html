@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="roomify_favicon.png">
+    <title>Roomify UAP - Login/Register</title>
+    <link rel="stylesheet" href="roomify_styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <img src="roomify.png" alt="Roomify Logo" class="logo"
+        height="75">
+        <h1>Roomify UAP</h1>
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="showSection('login-options')">Login</button>
+            <button class="tab-button" onclick="showSection('register-options')">Register</button>
+        </div>
+
+        <!-- Login Options -->
+        <div id="login-options" class="tab-content active">
+            <button class="option-button" onclick="showSection('login-renter')">As Renter</button>
+            <button class="option-button" onclick="showSection('login-owner')">As Owner</button>
+        </div>
+
+        <!-- Register Options -->
+        <div id="register-options" class="tab-content">
+            <button class="option-button" onclick="showSection('register-renter')">As Renter</button>
+            <button class="option-button" onclick="showSection('register-owner')">As Owner</button>
+        </div>
+
+        <!-- Login Forms -->
+        <div id="login-renter" class="tab-content">
+            <h2>Login as Renter</h2>
+            <form>
+                <input type="username" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <div class="form-footer">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div id="login-owner" class="tab-content">
+            <h2>Login as Owner</h2>
+            <form>
+                <input type="username" placeholder="Username" required>
+                <input type="password" placeholder="Password" required>
+                <div class="form-footer">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Register Forms -->
+        <div id="register-renter" class="tab-content">
+            <h2>Register as Renter</h2>
+            <form>
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <input type="password" placeholder="Password" required>
+                <div class="form-footer">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <div id="register-owner" class="tab-content">
+            <h2>Register as Owner</h2>
+            <form>
+                <input type="text" placeholder="First Name" required>
+                <input type="text" placeholder="Last Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Phone Number" required>
+                <input type="password" placeholder="Password" required>
+                <div class="form-footer">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.tab-content').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            if (sectionId === 'login-options' || sectionId === 'register-options') {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                if (sectionId === 'login-options') {
+                    document.querySelectorAll('.tab-button')[0].classList.add('active');
+                } else {
+                    document.querySelectorAll('.tab-button')[1].classList.add('active');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
