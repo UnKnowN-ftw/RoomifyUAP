@@ -65,15 +65,13 @@ def register_user(request, role):
         )
         user.save()
 
-        # TODO: store phone/role in a Profile model if you have one
+        # TODO: store phone/role in a Profile model
 
         messages.success(request, f"Account created successfully as {role.capitalize()}! Please log in.")
         return redirect('home')
 
     return redirect('home')
 
-
-# ---------- LOGOUT ----------
 def logout_user(request):
     if request.user.is_authenticated:
         logout(request)
