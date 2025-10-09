@@ -75,7 +75,6 @@ def register_user(request, role):
 
 # ---------- LOGOUT ----------
 def logout_user(request):
-    """Log out the current user and redirect to home."""
     if request.user.is_authenticated:
         logout(request)
         messages.info(request, 'You have been logged out.')
