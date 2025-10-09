@@ -1,17 +1,19 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="Images/roomify_favicon.png">
+    <link rel="icon" type="image/png" href="{% static 'Images/roomify_favicon.png' %}">
     <title>Roomify UAP - Login/Register</title>
-    <link rel="stylesheet" href="roomify_styles.css">
+    <link rel="stylesheet" href="{% static 'css/roomify_styles.css' %}">
 </head>
 
 <body>
     <div class="container">
-        <img src="Images/ROOMIFY.png" alt="Roomify Logo" class="logo"
+        <img src="{% static 'Images/ROOMIFY.png' %}" alt="Roomify Logo" class="logo"
         height="75">
         <h1>Roomify UAP</h1>
         <div class="tab-buttons">
@@ -71,6 +73,7 @@
                 <input type="email" placeholder="Email" required>
                 <input type="tel" placeholder="Phone Number" required>
                 <input type="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
                 <div class="form-footer">
                     <label>
                         <input type="checkbox"> Remember Me
@@ -88,6 +91,7 @@
                 <input type="email" placeholder="Email" required>
                 <input type="tel" placeholder="Phone Number" required>
                 <input type="password" placeholder="Password" required>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
                 <div class="form-footer">
                     <label>
                         <input type="checkbox"> Remember Me
