@@ -1,18 +1,21 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoomifyUAP | Search Hostels Rentals</title>
-  <link rel="stylesheet" href="landing.css">
-</head>
+  <link rel="stylesheet" href="{% static 'css/homepage_styles.css' %}"></head>
+
 <body>
   <header class="navbar">
     <div class="logo">RoomifyUAP</div>
     <nav>
-      <a href="{% url 'login' %}" class="btn">Sign in</a>
-      <a href="{% url 'register' %}" class="btn">Register</a>
+      <a href="{% url 'login_user' 'renter' %}" class="btn">Sign in</a>
     </nav>
+
+    
   </header>
 
   <section class="hero">
@@ -30,19 +33,16 @@
     <h2>Find Your Next Stay</h2>
     <div class="cards">
       <div class="card">
-        <img src="image.png" alt="First Class Room">
+        <img src="{% static '/images/image.png' %}" alt="First Class Room">
         <h3>First Class Room</h3>
-        
       </div>
       <div class="card">
-        <img src="imange2.png" alt="Room For Two">
+        <img src="{% static '/images/imange2.png' %}" alt="Room For Two">
         <h3>Room For Two</h3>
-        
       </div>
       <div class="card">
-        <img src="image03y.png" alt="Ordinary Room">
+        <img src="{% static '/images/image03y.png' %}" alt="Ordinary Room">
         <h3>Ordinary Room</h3>
-        
       </div>
     </div>
   </section>
