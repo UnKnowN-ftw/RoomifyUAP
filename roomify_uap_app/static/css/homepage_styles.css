@@ -1,0 +1,90 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: #f8f9fa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9a1ff;
+  padding: 15px 40px;
+  color: black;
+}
+
+.navbar .logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.navbar nav a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.navbar nav .btn {
+  background: #0071c2;
+  padding: 6px 12px;
+  border-radius: 5px;
+}
+
+.hero {
+  text-align: center;
+  background: #623097;
+  padding: 50px 20px;
+  color: white;
+}
+
+.search-box {
+  margin-top: 20px;
+}
+
+.search-box input, .search-box button {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+}
+
+.search-box button {
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.offers {
+  padding: 40px;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 250px;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  height: 150px;
+  object-fit: cover;
+}
+
+footer {
+  text-align: center;
+  background: #003580;
+  color: white;
+  padding: 15px;
+  margin-top: 40px;
+}
