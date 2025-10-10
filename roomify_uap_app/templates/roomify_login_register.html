@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
     <title>Roomify UAP - Login/Register</title>
     <link rel="stylesheet" href="{% static 'css/login_register_styles.css' %}" />
   </head>
@@ -13,9 +14,10 @@
       <img src="{% static 'Images/ROOMIFY.png' %}" alt="Logo" class="logo" height="75" />
       <h1>Roomify UAP</h1>
 
+      <!-- Tabs for Login / Register -->
       <div class="tab-buttons">
-        <button class="tab-button active" onclick="showSection('login-options')">Login</button>
-        <button class="tab-button" onclick="showSection('register-options')">Register</button>
+        <button class="tab-button active" onclick="goToLogin()">Login</button>
+        <button class="tab-button" onclick="goToRegister()">Register</button>
       </div>
 
       <!-- Login -->
@@ -81,20 +83,31 @@
       </div>
     </div>
 
-    <script>
-      function showSection(id) {
-        document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'))
-        document.getElementById(id).classList.add('active')
-      
-        const tabButtons = document.querySelectorAll('.tab-button')
-        if (id === 'login-options') {
-          tabButtons[0].classList.add('active')
-          tabButtons[1].classList.remove('active')
-        } else if (id === 'register-options') {
-          tabButtons[0].classList.remove('active')
-          tabButtons[1].classList.add('active')
-        }
-      }
-    </script>
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    if (id === 'login-options' || id.startsWith('login-')) {
+      tabButtons[0].classList.add('active');
+      tabButtons[1].classList.remove('active');
+    } else if (id === 'register-options' || id.startsWith('register-')) {
+      tabButtons[0].classList.remove('active');
+      tabButtons[1].classList.add('active');
+    }
+  }
+
+  function goToLogin() {
+    history.pushState({}, '', '/login/user/');
+    showSection('login-options');
+  }
+
+  function goToRegister() {
+    history.pushState({}, '', '/register/user/');
+    showSection('register-options');
+  }
+</script>
+
   </body>
 </html>
