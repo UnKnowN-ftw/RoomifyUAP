@@ -6,15 +6,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoomifyUAP | Search Hostels Rentals</title>
+  <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}">
   <link rel="stylesheet" href="{% static 'css/homepage_styles.css' %}"></head>
 
 <body>
   <header class="navbar">
-    <div class="logo">RoomifyUAP</div>
+    <div class="logo">
+    <span class="logo-text-with-bg">
+      <img src="{% static 'images/roomify_favicon.png' %}" alt="RoomifyUAP Logo" class="logo-bg-img">
+      RoomifyUAP
+    </span>
+    </div>
     <nav>
       <a href="{% url 'login_user' 'renter' %}" class="btn">Sign in</a>
     </nav>
-
     
   </header>
 

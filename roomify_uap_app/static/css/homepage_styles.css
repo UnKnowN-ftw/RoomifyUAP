@@ -13,10 +13,35 @@ body {
   color: black;
 }
 
-.navbar .logo {
+.logo-text-with-bg {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  position: relative; 
+  display: inline-block;
+  
+  padding-left: 1.6em; 
+
+.logo-bg-img {
+  position: absolute;
+  
+  left: 0.2em; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  width: 1.2em; 
+  height: 1.2em;
+  
+  opacity: 1; 
+
+  object-fit: contain;
+  pointer-events: none;
+}
+}
+
+/* .navbar .logo {
   font-size: 22px;
   font-weight: bold;
-}
+} */
 
 .navbar nav a {
   color: white;
