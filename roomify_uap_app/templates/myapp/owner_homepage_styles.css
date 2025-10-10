@@ -17,7 +17,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #d941ff62;
+  background-color: #8917a562;
   padding: 15px 5%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -191,8 +191,6 @@ body {
   font-weight: bold;
 }
 
-
-
 .room-card {
   background: #fff;
   border-radius: 12px;
@@ -207,7 +205,6 @@ body {
   object-fit: cover;
   display: block;  
 }
-
 
 .actions {
   display: flex;

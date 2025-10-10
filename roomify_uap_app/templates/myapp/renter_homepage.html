@@ -3,62 +3,144 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Roomify UAP - Renter Portal</title>
+    <link rel="icon" type="image/png" href="Images/roomify_favicon.png" />
+    <title>Roomify UAP - Renter Homepage</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="renter_homepage_styles.css" />
   </head>
   <body>
-    <header>
-      <div class="logo">🏡 Roomify UAP</div>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Browse Hostels</a></li>
-          <li><a href="#">My Bookings</a></li>
-          <li><a href="#">Favorites</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="logo">
+        <img src="Images/ROOMIFY.png" alt="Logo" />
+        <div>
+          <h2>Roomify UAP</h2>
+          <p>Find Your Space</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Browse</a>
+        <a href="#">Favorites</a>
+        <a href="#">My Bookings</a>
       </nav>
+      <div class="profile-icon">
+        <i class="bx bx-user"></i>
+      </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
-      <div class="hero-content">
-        <h1>Find Your Perfect Hostel Near UAP</h1>
-        <p>
-          Search verified hostels, compare prices, and connect directly with
-          owners.
-        </p>
-        <a href="#" class="btn">Browse Hostels</a>
-      </div>
-      <div class="hero-img">
-        <img src="your-image-here.jpg" alt="Renter Illustration" />
-      </div>
-    </section>
-
-    <section class="features">
-      <h2>Renter Features</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>Search by Location</h3>
-          <p>
-            Find hostels close to your university with all essential details.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Compare Prices</h3>
-          <p>
-            Check rent amounts, room size, and amenities to make the right
-            choice.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Save Favorites</h3>
-          <p>Bookmark your preferred hostels to revisit them easily later.</p>
-        </div>
+      <h1>Find Your Perfect Student Accommodation</h1>
+      <p>
+        Browse through hundreds of verified hostel listings near UAP.
+        Affordable, safe, and comfortable living spaces for students.
+      </p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search by location, area..." />
+        <select>
+          <option>Double</option>
+          <option>Single</option>
+          <option>Shared</option>
+        </select>
+        <select>
+          <option>৳5,000 - 10,000</option>
+          <option>৳10,000 - 15,000</option>
+          <option>৳15,000 - 20,000</option>
+        </select>
+        <button>Search</button>
       </div>
     </section>
 
-    <footer>
-      <p>© 2025 Roomify UAP | For Students</p>
-    </footer>
+    <!-- Listings Section -->
+    <section class="listings">
+      <div class="listings-header">
+        <h2>Available Listings</h2>
+        <p>Showing hostels near UAP</p>
+        <div class="filter-controls">
+          <button class="filter-btn">Filters</button>
+          <select>
+            <option>Featured</option>
+            <option>Newest</option>
+            <option>Lowest Price</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <!-- Card 1 -->
+        <div class="listing-card">
+          <div class="card-image">
+            <span class="badge">Featured</span>
+            <img src="Images/room1.jpg" alt="Room 1" />
+            <div class="fav-btn">
+              <i class="bx bx-heart"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>Modern Single Room</h3>
+            <p class="location">Uttara, Dhaka</p>
+            <p class="rating">⭐ 4.8 (24 reviews)</p>
+            <div class="tags">
+              <span>WiFi</span><span>AC</span><span>Attached Bath</span>
+            </div>
+            <div class="price-details">
+              <p>1 bed | 120 sq ft</p>
+              <h4>৳8,000<span>/month</span></h4>
+            </div>
+            <button class="details-btn">View Details</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="listing-card">
+          <div class="card-image">
+            <span class="badge">Featured</span>
+            <img src="Images/room2.jpg" alt="Room 2" />
+            <div class="fav-btn">
+              <i class="bx bx-heart"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>Premium Student Accommodation</h3>
+            <p class="location">Banani, Dhaka</p>
+            <p class="rating">⭐ 4.9 (31 reviews)</p>
+            <div class="tags">
+              <span>WiFi</span><span>AC</span><span>Gym</span>
+            </div>
+            <div class="price-details">
+              <p>2 bed | 200 sq ft</p>
+              <h4>৳12,000<span>/month</span></h4>
+            </div>
+            <button class="details-btn">View Details</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="listing-card">
+          <div class="card-image">
+            <span class="badge">Featured</span>
+            <img src="Images/room3.jpg" alt="Room 3" />
+            <div class="fav-btn">
+              <i class="bx bx-heart"></i>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>Cozy Shared Room</h3>
+            <p class="location">Gulshan, Dhaka</p>
+            <p class="rating">⭐ 4.6 (18 reviews)</p>
+            <div class="tags"><span>WiFi</span><span>Common Kitchen</span></div>
+            <div class="price-details">
+              <p>2 bed | 180 sq ft</p>
+              <h4>৳5,000<span>/month</span></h4>
+            </div>
+            <button class="details-btn">View Details</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </body>
 </html>
