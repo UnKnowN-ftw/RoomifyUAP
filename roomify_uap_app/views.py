@@ -2,10 +2,37 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from .models import Profile
 
 def home(request):
+    if request.user.is_authenticated:
+        # Redirect logged-in users directly to their dashboard
+        profile = Profile.objects.filter(user=request.user).first()
+        if profile and profile.role == 'renter':
+            return redirect('renter_dashboard')
+        elif profile and profile.role == 'owner':
+            return redirect('owner_dashboard')
     return render(request, 'roomify_login_register.html')
+
+
+def renter_dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    profile = Profile.objects.filter(user=request.user).first()
+    if profile.role != 'renter':
+        messages.error(request, 'Access denied.')
+        return redirect('home')
+    return render(request, 'renter_dashboard.html')
+
+
+def owner_dashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    profile = Profile.objects.filter(user=request.user).first()
+    if profile.role != 'owner':
+        messages.error(request, 'Access denied.')
+        return redirect('home')
+    return render(request, 'owner_dashboard.html')
 
 
 def login_user(request, role):
@@ -14,25 +41,24 @@ def login_user(request, role):
         password = request.POST.get('password', '')
 
         if not username or not password:
-            messages.error(request, 'Username and password are required.')
+            messages.error(request, 'Both fields are required.')
             return redirect('home')
 
         user = authenticate(request, username=username, password=password)
+        if user:
+            profile = Profile.objects.filter(user=user).first()
+            if profile.role != role:
+                messages.error(request, f'You are not registered as a {role}.')
+                return redirect('home')
 
-        if user is not None:
             login(request, user)
-            messages.success(request, f"Logged in successfully as {role.capitalize()}!")
-
             if role == 'renter':
                 return redirect('renter_dashboard')
-            if role == 'owner':
+            else:
                 return redirect('owner_dashboard')
-
+        else:
+            messages.error(request, 'Invalid username or password.')
             return redirect('home')
-
-        messages.error(request, 'Invalid username or password.')
-        return redirect('home')
-
     return redirect('home')
 
 
@@ -42,38 +68,50 @@ def register_user(request, role):
         last_name = request.POST.get('last_name', '').strip()
         email = request.POST.get('email', '').strip()
         phone = request.POST.get('phone', '').strip()
+        username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
-        username = request.POST.get('username', '').strip()
+
         if not username and email:
             username = email.split('@')[0]
 
         if not username:
-            messages.error(request, 'A username or valid email is required.')
+            messages.error(request, 'Username or email is required.')
+            return redirect('home')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
             return redirect('home')
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists.')
             return redirect('home')
 
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already registered.')
+            return redirect('home')
+
+        # Create user and profile
         user = User.objects.create_user(
             username=username,
             first_name=first_name,
             last_name=last_name,
             email=email,
-            password=password,
+            password=password
         )
-        user.save()
+        Profile.objects.create(user=user, role=role, phone=phone)
 
-        # TODO: store phone/role in a Profile model
-
-        messages.success(request, f"Account created successfully as {role.capitalize()}! Please log in.")
-        return redirect('home')
-
+        # Auto-login
+        login(request, user)
+        if role == 'renter':
+            return redirect('renter_dashboard')
+        else:
+            return redirect('owner_dashboard')
     return redirect('home')
+
 
 def logout_user(request):
     if request.user.is_authenticated:
         logout(request)
-        messages.info(request, 'You have been logged out.')
+        messages.info(request, 'Logged out successfully.')
     return redirect('home')

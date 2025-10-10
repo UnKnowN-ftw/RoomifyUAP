@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>Roomify UAP - Owner Dashboard</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/owner_dashboard_styles.css' %}" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div>
+          <h2>Roomify UAP</h2>
+          <p>Owner Dashboard</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">My Listings</a>
+        <a href="#">Analytics</a>
+        <a href="#">Messages</a>
+      </nav>
+      <div class="profile-icon">
+        <i class="bx bx-user"></i>
+        <a href="{% url 'logout_user' %}">Logout</a>
+      </div>
+    </header>
+
+    <!-- Owner Overview Section -->
+    <section class="owner-summary">
+      <h1>Welcome back, Owner!</h1>
+      <p>Manage your hostel listings and track performance</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Listings</h3>
+          <h2>12</h2>
+          <p>+2 this month</p>
+        </div>
+        <div class="stat-card">
+          <h3>Occupancy Rate</h3>
+          <h2>85%</h2>
+          <p>+5% from last month</p>
+        </div>
+        <div class="stat-card">
+          <h3>Monthly Revenue</h3>
+          <h2>৳85,000</h2>
+          <p>From 18 tenants</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Views</h3>
+          <h2>1,284</h2>
+          <p>+18% this week</p>
+        </div>
+      </div>
+
+      <button class="new-listing-btn">+ Post New Listing</button>
+    </section>
+
+    <!-- Active Listings -->
+    <section class="active-listings">
+      <h2>Your Active Listings</h2>
+      <p>Manage and monitor your hostel rooms</p>
+
+      <div class="listing-container">
+        <!-- Listing 1 -->
+        <div class="owner-card">
+          <img src="{% static 'images/room1.jpg' %}" alt="Room 1" />
+          <div class="info">
+            <h3>Modern Single Room</h3>
+            <p>Uttara, Dhaka</p>
+            <p>৳8,000/month | 120 sq ft | 0/1 occupied</p>
+          </div>
+          <div class="actions">
+            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
+            <button class="view"><i class="bx bx-show"></i> View</button>
+          </div>
+        </div>
+
+        <!-- Listing 2 -->
+        <div class="owner-card">
+          <img src="{% static 'images/room2.jpg' %}" alt="Room 2" />
+          <div class="info">
+            <h3>Cozy Shared Room</h3>
+            <p>Banani, Dhaka</p>
+            <p>৳5,000/month | 180 sq ft | 2/2 occupied</p>
+          </div>
+          <div class="actions">
+            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
+            <button class="view"><i class="bx bx-show"></i> View</button>
+          </div>
+        </div>
+
+        <!-- Listing 3 -->
+        <div class="owner-card">
+          <img src="{% static 'images/room3.jpg' %}" alt="Room 3" />
+          <div class="info">
+            <h3>Premium Double Room</h3>
+            <p>Gulshan, Dhaka</p>
+            <p>৳12,000/month | 200 sq ft | 0/2 occupied</p>
+          </div>
+          <div class="actions">
+            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
+            <button class="view"><i class="bx bx-show"></i> View</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

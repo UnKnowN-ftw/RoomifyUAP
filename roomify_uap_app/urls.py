@@ -14,7 +14,7 @@ urlpatterns = [
     # Logout route
     path('logout/', views.logout_user, name='logout_user'),
 
-    # Example placeholders for dashboards (create corresponding views later)
-    path('dashboard/renter/', views.home, name='renter_dashboard'),
-    path('dashboard/owner/', views.home, name='owner_dashboard'),
+    # Dashboards
+    path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
+    path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
 ]
