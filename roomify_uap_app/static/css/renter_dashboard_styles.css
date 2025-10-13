@@ -18,7 +18,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #d941ff62;
+  background-color: #4c0685;
   padding: 15px 5%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -40,16 +40,17 @@ body {
 .logo h2 {
   font-size: 1.2rem;
   margin-bottom: 3px;
+  color: rgb(214, 188, 223);
 }
 
 .logo p {
   font-size: 0.8rem;
-  color: #4c4c4c;
+  color: white;
 }
 
 .nav-links a {
   margin: 0 15px;
-  color: #222;
+  color: white;
   text-decoration: none;
   font-weight: 500;
 }
@@ -64,7 +65,7 @@ body {
 
 .profile-icon i {
   font-size: 32px;
-  color: #333;
+  color: white;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -75,7 +76,7 @@ body {
 
 /* ===== Hero Section ===== */
 .hero {
-  background-color: #623097;
+  background-color: #fa91d0;
   color: white;
   text-align: center;
   padding: 50px 20px;
@@ -288,4 +289,68 @@ body {
   .card-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* ==== Footer Styling ==== */
+
+.footer {
+  background: #4c0685;
+  color: white;
+  padding: 40px 20px 15px;
+  margin-top: 50px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.footer-section p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.footer-section ul li a {
+  color: #ddd;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #f4a9ff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 12px;
+  font-size: 14px;
+  border-top: 1px solid #5e3b7e;
 }
