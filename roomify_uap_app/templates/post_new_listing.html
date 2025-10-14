@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'images/roomify_favicon.png' %}"
+    />
+    <title>Roomify UAP - Post New Listing</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/post_new_listing_styles.css' %}"
+    />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div>
+          <h2>Roomify UAP</h2>
+          <p>Owner Dashboard</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">My Listings</a>
+        <a href="#">Analytics</a>
+        <a href="#">Messages</a>
+      </nav>
+      <div class="profile-icon">
+        <i class="bx bx-user"></i>
+        <a href="{% url 'logout_user' %}">Logout</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+      <h2>Post a New Listing</h2>
+      <p>Fill out the details below to add a new hostel room listing.</p>
+
+      <form class="listing-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="room_title">Room Title</label>
+          <input
+            type="text"
+            id="room_title"
+            name="room_title"
+            placeholder="e.g. Cozy Shared Room"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            placeholder="e.g. Farmgate, Dhaka"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="rent">Rent (৳/month)</label>
+            <input
+              type="number"
+              id="rent"
+              name="rent"
+              placeholder="e.g. 8000"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="room_size">Room Size (sq ft)</label>
+            <input
+              type="number"
+              id="room_size"
+              name="room_size"
+              placeholder="e.g. 150"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="occupancy">Occupancy</label>
+            <input
+              type="number"
+              id="occupancy"
+              name="occupancy"
+              placeholder="e.g. 2"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            placeholder="Describe your room, facilities, etc."
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="images">Upload Images</label>
+          <input
+            type="file"
+            id="images"
+            name="images"
+            accept="image/*"
+            multiple
+          />
+        </div>
+
+        <button type="submit" class="submit-btn">+ Post Listing</button>
+      </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Roomify UAP</h3>
+          <p>Empowering hostel and rental owners with smart tools.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">My Listings</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Email: support@roomifyuap.com</li>
+            <li>Phone: +8801796968195</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+    </footer>
+  </body>
+</html>
