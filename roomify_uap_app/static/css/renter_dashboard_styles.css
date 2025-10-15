@@ -76,7 +76,7 @@ body {
 
 /* ===== Hero Section ===== */
 .hero {
-  background-color: #fa91d0;
+  background-color: #eed04c;
   color: white;
   text-align: center;
   padding: 50px 20px;
@@ -85,10 +85,11 @@ body {
 .hero h1 {
   font-size: 1.8rem;
   margin-bottom: 10px;
+  color: #000000;
 }
 
 .hero p {
-  color: #ccc;
+  color: #000000;
   margin-bottom: 25px;
 }
 
