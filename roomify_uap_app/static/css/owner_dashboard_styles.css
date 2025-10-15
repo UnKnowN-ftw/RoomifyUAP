@@ -123,13 +123,18 @@ body {
 }
 
 .new-listing-btn {
-  background-color: #000;
+  background-color: #4c0685;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
+}
+
+.new-listing-btn:hover {
+  background-color: #3a005f;
+  color: white;
 }
 
 /* ===== Active Listings ===== */
