@@ -128,3 +128,7 @@ def logout_user(request):
         logout(request)
         messages.info(request, 'Logged out successfully.')
     return redirect('home')
+
+def post_new_listing(request):
+    return render(request, 'post_new_listing.html')
+

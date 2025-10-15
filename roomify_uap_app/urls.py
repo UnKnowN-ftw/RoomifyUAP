@@ -17,4 +17,7 @@ urlpatterns = [
     # Dashboards
     path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+
+    path('post-new-listing/', views.post_new_listing, name='post_new_listing')
+
 ]
