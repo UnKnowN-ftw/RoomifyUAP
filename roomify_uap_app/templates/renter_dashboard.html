@@ -35,7 +35,9 @@
         <a href="#">My Bookings</a>
       </nav>
       <div class="profile-icon">
-        <i class="bx bx-user"></i>
+        <a href="{% url 'renter_profile' %}">
+          <i class="bx bx-user"></i>
+        </a>
         <a href="{% url 'logout_user' %}">Logout</a>
       </div>
     </header>

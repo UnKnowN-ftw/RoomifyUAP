@@ -331,3 +331,7 @@ def renter_dashboard(request):
 def view_details(request, room_id):
     room = get_object_or_404(Listing, id=room_id)
     return render(request, 'view_details.html', {'room': room})
+
+def renter_profile(request):
+    return render(request, 'renter_profile.html')
+
