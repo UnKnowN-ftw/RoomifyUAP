@@ -79,52 +79,30 @@
       <p>Manage and monitor your hostel rooms</p>
 
       <div class="listing-container">
-        <!-- Listing 1 -->
-        <div class="owner-card">
-          <img
-            src="{% static 'images/modern-single-room.jpg' %}"
-            alt="Room 1"
-          />
-          <div class="info">
-            <h3>Modern Single Room</h3>
-            <p>Uttara, Dhaka</p>
-            <p>৳8,000/month | 120 sq ft | 0/1 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
+  {% if listings %}
+    {% for room in listings %}
+      <div class="owner-card">
+        {% if room.image %}
+          <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
+        {% else %}
+          <img src="{% static 'images/default-room.jpg' %}" alt="Room" />
+        {% endif %}
+        <div class="info">
+          <h3>{{ room.room_title }}</h3>
+          <p>{{ room.location }}</p>
+          <p>৳{{ room.rent }}/month | {{ room.room_size }} sq ft | {{ room.occupancy }}/{{ room.max_occupancy }} occupied</p>
         </div>
-
-        <!-- Listing 2 -->
-        <div class="owner-card">
-          <img src="{% static 'images/cozy-shared-room.jpg' %}" alt="Room 2" />
-          <div class="info">
-            <h3>Cozy Shared Room</h3>
-            <p>Banani, Dhaka</p>
-            <p>৳5,000/month | 180 sq ft | 2/2 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
-        </div>
-
-        <!-- Listing 3 -->
-        <div class="owner-card">
-          <img src="{% static 'images/premium-room.jpg' %}" alt="Room 3" />
-          <div class="info">
-            <h3>Premium Double Room</h3>
-            <p>Gulshan, Dhaka</p>
-            <p>৳12,000/month | 200 sq ft | 0/2 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
+        <div class="actions">
+          <button type="button">Edit</button>
+          <button type="button">View</button>
         </div>
       </div>
-    </section>
+    {% endfor %}
+  {% else %}
+    <p>You haven't posted any listings yet.</p>
+  {% endif %}
+</div>
+
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">

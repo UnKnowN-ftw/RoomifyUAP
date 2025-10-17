@@ -28,14 +28,20 @@ def renter_dashboard(request):
     return render(request, 'renter_dashboard.html')
 
 
+@login_required
 def owner_dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
+    # Ensure only owners access this
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'owner':
         messages.error(request, 'Access denied.')
         return redirect('home')
-    return render(request, 'owner_dashboard.html')
+
+    # Fetch only listings by this owner
+    owner_listings = Listing.objects.filter(owner=request.user).order_by('-created_at')
+
+    return render(request, 'owner_dashboard.html', {
+        'listings': owner_listings
+    })
 
 
 def login_user(request, role):
