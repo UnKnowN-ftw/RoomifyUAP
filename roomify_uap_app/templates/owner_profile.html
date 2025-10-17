@@ -10,10 +10,7 @@
       href="{% static 'images/roomify_favicon.png' %}"
     />
     <title>Renter Profile</title>
-    <link
-      rel="stylesheet"
-      href="{% static 'css/renter_profile_styles.css' %}"
-    />
+    <link rel="stylesheet" href="{% static 'css/owner_profile_styles.css' %}" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
@@ -59,7 +56,7 @@
               <span class="unverified-tag">Unverified</span>
             </div>
             <p class="member-info">
-              Member of — <strong>University of Asia Pacific</strong>
+              Property Owner since — <strong>March 2023</strong>
             </p>
           </div>
         </div>
@@ -68,19 +65,19 @@
           <div class="stats-grid">
             <div class="stat-item">
               <span class="stat-number">0</span>
-              <span class="stat-label">Active Booking</span>
+              <span class="stat-label">Properties</span>
             </div>
             <div class="stat-item">
               <span class="stat-number">0</span>
-              <span class="stat-label">Past Bookings</span>
+              <span class="stat-label">Total Rooms</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">0</span>
-              <span class="stat-label">Saved Listings</span>
+              <span class="stat-number">0%</span>
+              <span class="stat-label">Occupency</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">0</span>
-              <span class="stat-label">Reviews</span>
+              <span class="stat-number">0.0</span>
+              <span class="stat-label">Rating</span>
             </div>
           </div>
           <button class="edit-photo-btn">
@@ -124,7 +121,7 @@
           </div>
 
           <div class="info-field">
-            <label for="student-id">Student ID</label>
+            <label for="student-id">NID Card Number</label>
             <input
               type="text"
               id="student-id"
@@ -132,26 +129,8 @@
             />
           </div>
 
-          <div class="info-field">
-            <label for="university">University</label>
-            <input
-              type="text"
-              id="university"
-              placeholder="Enter your university name"
-            />
-          </div>
-
-          <div class="info-field">
-            <label for="program">Program/Department</label>
-            <input
-              type="text"
-              id="program"
-              placeholder="Enter your department or program"
-            />
-          </div>
-
           <div class="info-field full-width">
-            <label for="address">Permanent Address</label>
+            <label for="address">Address</label>
             <div class="input-with-icon">
               <i class="bx bx-map"></i>
               <input
@@ -212,18 +191,16 @@
             <h3>Verification Required</h3>
             <p>To complete student verification, please provide:</p>
             <ul>
-              <li>A valid <strong>University ID card</strong></li>
-              <li>
-                <strong>Enrollment proof</strong> for the current semester
-              </li>
-              <li><strong>University email verification</strong></li>
+              <li>Government issued <strong>photo ID(NID/Passport)</strong></li>
+              <li><strong>Proof of</strong> property ownership documents</li>
+              <li><strong>Recent utility bill for verification</strong></li>
             </ul>
           </div>
         </div>
 
         <button class="verify-status-btn">
           <i class="bx bx-lock"></i>
-          Verify Student Status
+          Start Verification Process
         </button>
       </section>
     </div>
