@@ -1,0 +1,105 @@
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fa;
+    color: #333;
+    padding: 20px;
+}
+
+/* Header */
+.admin-header {
+    text-align: center;
+    padding: 20px;
+    background: #2b3a67;
+    color: #fff;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.admin-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* Table Wrapper */
+.table-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Table */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.admin-table thead {
+    background: #2b3a67;
+    color: #fff;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-table tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease-in-out;
+}
+
+.btn-approve {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #218838;
+}
+
+.btn-block {
+    background-color: #e63946;
+    color: white;
+}
+
+.btn-block:hover {
+    background-color: #c62828;
+}
+
+/* Status Badge */
+.status-active {
+    background: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.status-pending {
+    background: #f4c542;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+}

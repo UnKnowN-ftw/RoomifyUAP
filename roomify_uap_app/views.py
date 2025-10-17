@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile
+from .models import Owner, Renter
 
 def home(request):
     if request.user.is_authenticated:
@@ -132,3 +133,31 @@ def logout_user(request):
 def post_new_listing(request):
     return render(request, 'post_new_listing.html')
 
+
+def admin_dashboard(request):
+    owners = Owner.objects.all()
+    renters = Renter.objects.all()
+    return render(request, 'admin_dashboard.html', {
+        'owners': owners,
+        'renters': renters
+    })
+
+def verify_user(request, user_id, user_type):
+    if request.method == 'POST':
+        if user_type == 'owner':
+            user = get_object_or_404(Owner, id=user_id)
+        else:
+            user = get_object_or_404(Renter, id=user_id)
+        user.is_verified = True
+        user.save()
+    return redirect('admin_dashboard')
+
+def reject_user(request, user_id, user_type):
+    if request.method == 'POST':
+        if user_type == 'owner':
+            user = get_object_or_404(Owner, id=user_id)
+        else:
+            user = get_object_or_404(Renter, id=user_id)
+        user.is_verified = False
+        user.save()
+    return redirect('admin_dashboard')

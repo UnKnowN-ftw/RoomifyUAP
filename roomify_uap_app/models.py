@@ -12,3 +12,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.role})"
+    
+class Owner(models.Model):
+    name = models.CharField(max_length=100)
+    is_verified = models.BooleanField(default=False)
+
+class Renter(models.Model):
+    name = models.CharField(max_length=100)
+    is_verified = models.BooleanField(default=False)
