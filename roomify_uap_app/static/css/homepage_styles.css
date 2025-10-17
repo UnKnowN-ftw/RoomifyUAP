@@ -81,21 +81,29 @@ body {
   margin-bottom: 25px;
 }
 
-.search-box {
-  margin-top: 20px;
+.search-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.search-box input, .search-box button {
+.search-bar input,
+.search-bar select {
   padding: 10px;
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  min-width: 180px;
+  border-radius: 10px;
 }
 
-.search-box button {
-  background: black;
+.search-bar button {
+  background-color: #000;
   color: white;
   border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -128,7 +136,7 @@ body {
 
 footer {
   text-align: center;
-  background: #2d0052;
+  background: #4c0685;
   color: white;
   padding: 15px;
   margin-top: 40px;
