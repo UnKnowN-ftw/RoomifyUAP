@@ -1,0 +1,289 @@
+/* Reset */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  background-color: #4c0685;
+  padding: 15px 5%;
+  box-shadow: 0 2px 4px rgb(253, 252, 252);
+}
+
+.logo {
+  display: flex;
+  align-items: top-left;
+  gap: 10px;
+}
+
+.logo img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 8px;
+  vertical-align: middle;
+}
+
+.logo h2 {
+  font-size: 1.2rem;
+  margin-bottom: 3px;
+  color: rgb(214, 188, 223);
+}
+
+.logo p {
+  font-size: 0.8rem;
+  color: white;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+.profile-icon img {
+  border-radius: 50%;
+}
+
+.profile-icon i {
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.profile-icon i:hover {
+  color: white;
+}
+
+
+/* Hero Section */
+.room-hero {
+  background-color: #eed04c;
+  padding: 30px 5%;
+  text-align: center;
+}
+
+.room-hero h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+.room-hero p {
+  color: #333;
+  font-size: 16px;
+}
+
+.rating {
+  margin-top: 8px;
+  color: #000;
+  font-weight: 600;
+}
+
+/* Gallery */
+.gallery {
+  padding: 30px 5%;
+  background-color: #eff4ffff;
+}
+
+.main-image img {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.thumbnails img {
+  width: 24%;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.thumbnails img:hover {
+  opacity: 0.8;
+}
+
+/* Room Details */
+.room-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 40px 5%;
+  background-color: #eaf0fa;
+  flex-wrap: wrap;
+}
+
+.details-info {
+  flex: 2;
+}
+
+.details-info h2 {
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.details-info p {
+  color: #444;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.amenities span {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Booking Card */
+.booking-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  flex: 1;
+  min-width: 280px;
+  text-align: center;
+}
+
+.booking-card h3 {
+  color: #000;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.booking-card p {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.book-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.book-btn:hover {
+  background-color: #4B0082;
+}
+
+.contact-owner {
+  margin-top: 20px;
+  color: #333;
+  font-size: 14px;
+}
+
+.contact-owner i {
+  margin-right: 5px;
+}
+
+/* Footer */
+.footer {
+  background: #4c0685;
+  color: white;
+  padding: 40px 20px 15px;
+  margin-top: 50px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.footer-section p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.footer-section ul li a {
+  color: #ddd;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #f4a9ff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 12px;
+  font-size: 14px;
+  border-top: 1px solid #5e3b7e;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .room-details {
+    flex-direction: column;
+  }
+
+  .main-image img {
+    height: 250px;
+  }
+
+  .thumbnails img {
+    height: 80px;
+  }
+}
