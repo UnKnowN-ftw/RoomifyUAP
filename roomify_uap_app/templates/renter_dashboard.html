@@ -79,83 +79,35 @@
       </div>
 
       <div class="card-grid">
-        <!-- Card 1 -->
-        <div class="listing-card">
-          <div class="card-image">
-            <span class="badge">Featured</span>
-            <img
-              src="{% static 'images/modern-single-room.jpg' %}"
-              alt="Room 1"
-            />
-            <div class="fav-btn">
-              <i class="bx bx-heart"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <h3>Modern Single Room</h3>
-            <p class="location">Uttara, Dhaka</p>
-            <p class="rating">⭐ 4.8 (24 reviews)</p>
-            <div class="tags">
-              <span>WiFi</span><span>AC</span><span>Attached Bath</span>
-            </div>
-            <div class="price-details">
-              <p>1 bed | 120 sq ft</p>
-              <h4>৳8,000<span>/month</span></h4>
-            </div>
-            <button class="details-btn">View Details</button>
-          </div>
-        </div>
+  {% for room in listings %}
+  <div class="listing-card">
+    <div class="card-image">
+      {% if room.image %}
+        <img src="{{ room.image.url }}" alt="{{ room.room_title }}">
+      {% else %}
+        <img src="{% static 'images/default-room.jpg' %}" alt="Default room">
+      {% endif %}
+      <div class="fav-btn"><i class="bx bx-heart"></i></div>
+    </div>
 
-        <!-- Card 2 -->
-        <div class="listing-card">
-          <div class="card-image">
-            <span class="badge">Featured</span>
-            <img src="{% static 'images/premium-room.jpg' %}" alt="Room 2" />
-            <div class="fav-btn">
-              <i class="bx bx-heart"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <h3>Premium Student Accommodation</h3>
-            <p class="location">Banani, Dhaka</p>
-            <p class="rating">⭐ 4.9 (31 reviews)</p>
-            <div class="tags">
-              <span>WiFi</span><span>AC</span><span>Gym</span>
-            </div>
-            <div class="price-details">
-              <p>2 bed | 200 sq ft</p>
-              <h4>৳12,000<span>/month</span></h4>
-            </div>
-            <button class="details-btn">View Details</button>
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="listing-card">
-          <div class="card-image">
-            <span class="badge">Featured</span>
-            <img
-              src="{% static 'images/cozy-shared-room.jpg' %}"
-              alt="Room 3"
-            />
-            <div class="fav-btn">
-              <i class="bx bx-heart"></i>
-            </div>
-          </div>
-          <div class="card-content">
-            <h3>Cozy Shared Room</h3>
-            <p class="location">Gulshan, Dhaka</p>
-            <p class="rating">⭐ 4.6 (18 reviews)</p>
-            <div class="tags"><span>WiFi</span><span>Common Kitchen</span></div>
-            <div class="price-details">
-              <p>2 bed | 180 sq ft</p>
-              <h4>৳5,000<span>/month</span></h4>
-            </div>
-            <button class="details-btn">View Details</button>
-          </div>
-        </div>
+    <div class="card-content">
+      <h3>{{ room.room_title }}</h3>
+      <p class="location">{{ room.location }}</p>
+      <div class="tags">
+        <span>{{ room.room_size }} sq ft</span>
+        <span>{{ room.occupancy }} person</span>
       </div>
-    </section>
+      <div class="price-details">
+        <h4>৳{{ room.rent }}<span>/month</span></h4>
+      </div>
+      <button class="details-btn">View Details</button>
+    </div>
+  </div>
+  {% empty %}
+    <p>No listings yet.</p>
+  {% endfor %}
+</div>
+
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
