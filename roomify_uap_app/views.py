@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Listing
+from .models import Owner, Renter
+
 
 def home(request):
     if request.user.is_authenticated:
@@ -132,3 +135,86 @@ def logout_user(request):
 def post_new_listing(request):
     return render(request, 'post_new_listing.html')
 
+
+def admin_dashboard(request):
+    owners = Owner.objects.all()
+    renters = Renter.objects.all()
+    return render(request, 'admin_dashboard.html', {
+        'owners': owners,
+        'renters': renters
+    })
+
+def verify_user(request, user_id, user_type):
+    if request.method == 'POST':
+        if user_type == 'owner':
+            user = get_object_or_404(Owner, id=user_id)
+        else:
+            user = get_object_or_404(Renter, id=user_id)
+        user.is_verified = True
+        user.save()
+    return redirect('admin_dashboard')
+
+def reject_user(request, user_id, user_type):
+    if request.method == 'POST':
+        if user_type == 'owner':
+            user = get_object_or_404(Owner, id=user_id)
+        else:
+            user = get_object_or_404(Renter, id=user_id)
+        user.is_verified = False
+        user.save()
+    return redirect('admin_dashboard')
+
+@login_required
+def post_new_listing(request):
+    # Only owners can post
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile or profile.role != 'owner':
+        messages.error(request, "Access denied.")
+        return redirect('home')
+
+    if request.method == 'POST':
+        room_title = request.POST.get('room_title')
+        location = request.POST.get('location')
+        rent = request.POST.get('rent')
+        room_size = request.POST.get('room_size')
+        occupancy = request.POST.get('occupancy')
+        description = request.POST.get('description')
+        image = request.FILES.get('images')  # matches your form input name "images"
+
+        # Basic validation (you can extend)
+        if not room_title or not location or not rent:
+            messages.error(request, 'Please fill required fields.')
+            return redirect('post_new_listing')
+
+        Listing.objects.create(
+            owner=request.user,
+            room_title=room_title,
+            location=location,
+            rent=rent,
+            room_size=room_size or 0,
+            occupancy=occupancy or 0,
+            description=description or '',
+            image=image
+        )
+
+        messages.success(request, 'Listing posted successfully.')
+        return redirect('renter_dashboard')
+
+    return render(request, 'post_new_listing.html')
+
+
+@login_required
+def renter_dashboard(request):
+    # Only renters allowed here per your flow — if you want everyone to see, remove role check
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile or profile.role != 'renter':
+        messages.error(request, 'Access denied.')
+        return redirect('home')
+
+    listings = Listing.objects.all().order_by('-created_at')  # newest first
+    return render(request, 'renter_dashboard.html', {'listings': listings})
+
+
+def view_details(request, room_id):
+    room = get_object_or_404(Listing, id=room_id)
+    return render(request, 'view_details.html', {'room': room})

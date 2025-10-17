@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>RoomifyUAP | Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard_styles.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/ROOMIFY.png' %}" alt="Roomify Logo" class="logo">
+            <h1>RoomifyUAP Admin</h1>
+        </div>
+        <nav>
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="#">Users</a>
+            <a href="#">Settings</a>
+            <a href="{% url 'logout_user' %}">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main>
+        <section class="dashboard-content">
+            <h2>Admin Dashboard</h2>
+            <p>Manage owners and renters efficiently from this panel.</p>
+
+            <!-- Owners Table -->
+            <div class="table-section">
+                <h3>Owners</h3>
+                <p>List of all registered property owners.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Verified</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="no-data">No owners found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Renters Table -->
+            <div class="table-section">
+                <h3>Renters</h3>
+                <p>List of all registered renters.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Verified</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="no-data">No renters found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            © 2025 RoomifyUAP | All Rights Reserved
+        </div>
+    </footer>
+</body>
+</html>
