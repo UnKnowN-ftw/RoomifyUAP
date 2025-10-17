@@ -214,3 +214,7 @@ def renter_dashboard(request):
     listings = Listing.objects.all().order_by('-created_at')  # newest first
     return render(request, 'renter_dashboard.html', {'listings': listings})
 
+
+def view_details(request, room_id):
+    room = get_object_or_404(Listing, id=room_id)
+    return render(request, 'view_details.html', {'room': room})
