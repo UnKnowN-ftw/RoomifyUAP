@@ -335,3 +335,5 @@ def view_details(request, room_id):
 def renter_profile(request):
     return render(request, 'renter_profile.html')
 
+def owner_profile(request):
+    return render(request, 'owner_profile.html')

@@ -18,8 +18,9 @@ urlpatterns = [
     path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
     path('dashboard/renter/profile/', views.renter_profile, name='renter_profile'),
 
-    
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+    path('dashboard/owner/profile/', views.owner_profile, name='owner_profile'),
+
     path('post-new-listing/', views.post_new_listing, name='post_new_listing'),
 
     path('dashboard/admin/login/', views.admin_login, name='admin_login'),
