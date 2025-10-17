@@ -24,5 +24,6 @@ urlpatterns = [
     path('verify/<int:user_id>/<str:user_type>/', views.verify_user, name='verify_user'),
     path('reject/<int:user_id>/<str:user_type>/', views.reject_user, name='reject_user'),
 
+    path('room/<int:room_id>/', views.view_details, name='view_details'),
 
 ]
