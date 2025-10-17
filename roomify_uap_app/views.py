@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile, Listing
 from .models import Owner, Renter
-
 
 def home(request):
     if request.user.is_authenticated:
@@ -135,14 +135,121 @@ def logout_user(request):
 def post_new_listing(request):
     return render(request, 'post_new_listing.html')
 
+def admin_login(request):
+    # Clear previous messages so old ones don't show on login page
+    list(messages.get_messages(request))  # consumes all existing messages
 
+    # If already logged in as staff, redirect to admin dashboard
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect('admin_dashboard')
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+        user = authenticate(request, username=username, password=password)
+
+        if user and user.is_staff:
+            login(request, user)
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Invalid credentials or unauthorized access.')
+
+    return render(request, 'admin_login.html')
+
+
+@staff_member_required(login_url='admin_login')
 def admin_dashboard(request):
     owners = Owner.objects.all()
     renters = Renter.objects.all()
+    admin_user = request.user  # logged-in admin
     return render(request, 'admin_dashboard.html', {
         'owners': owners,
-        'renters': renters
+        'renters': renters,
+        'admin_user': admin_user
     })
+
+    
+@staff_member_required(login_url='admin_login')
+def view_users(request):
+    """Display all users with filters and actions."""
+    users = User.objects.all().order_by('id')
+
+    # Optional: filter by staff/superuser/active if GET parameters exist
+    staff_filter = request.GET.get('staff', 'all')
+    super_filter = request.GET.get('superuser', 'all')
+    active_filter = request.GET.get('active', 'all')
+
+    if staff_filter == 'yes':
+        users = users.filter(is_staff=True)
+    elif staff_filter == 'no':
+        users = users.filter(is_staff=False)
+
+    if super_filter == 'yes':
+        users = users.filter(is_superuser=True)
+    elif super_filter == 'no':
+        users = users.filter(is_superuser=False)
+
+    if active_filter == 'yes':
+        users = users.filter(is_active=True)
+    elif active_filter == 'no':
+        users = users.filter(is_active=False)
+
+    return render(request, 'view_users.html', {
+        'users': users,
+        'staff_filter': staff_filter,
+        'super_filter': super_filter,
+        'active_filter': active_filter
+    })
+
+
+@staff_member_required(login_url='admin_login')
+def edit_user(request, user_id):
+    """Admin can update an existing user."""
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        user.username = request.POST.get('username').strip()
+        user.email = request.POST.get('email').strip()
+        user.first_name = request.POST.get('first_name').strip()
+        user.last_name = request.POST.get('last_name').strip()
+        user.is_staff = request.POST.get('is_staff') == 'on'
+        user.is_superuser = request.POST.get('is_superuser') == 'on'
+        user.is_active = request.POST.get('is_active') == 'on'
+
+        password = request.POST.get('password').strip()
+        if password:
+            user.set_password(password)
+            if user == request.user:
+                update_session_auth_hash(request, user)  # keeps admin logged in
+
+        user.save()
+        messages.success(request, 'User updated successfully.')
+        return redirect('admin_dashboard')  # Redirect to dashboard instead of view_users
+
+    return render(request, 'edit_user.html', {'user': user})
+
+
+@staff_member_required(login_url='admin_login')
+def delete_user(request, user_id):
+    """Admin can delete a user."""
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        user.delete()
+        messages.success(request, 'User deleted successfully.')
+        return redirect('view_users')
+
+    return render(request, 'delete_user.html', {'user': user})
+
+
+@staff_member_required(login_url='admin_login')
+def admin_logout(request):
+    """
+    Logs out the currently logged-in admin and redirects to the admin login page.
+    """
+    logout(request)
+    messages.info(request, 'Admin logged out successfully.')
+    return redirect('admin_login')
 
 def verify_user(request, user_id, user_type):
     if request.method == 'POST':

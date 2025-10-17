@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>RoomifyUAP | Edit User</title>
+    <link rel="stylesheet" href="{% static 'css/edit_user_styles.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/ROOMIFY.png' %}" alt="Roomify Logo" class="logo">
+            <h1>RoomifyUAP Admin</h1>
+        </div>
+        <nav>
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="{% url 'view_users' %}">Users</a>
+            <a href="{% url 'admin_logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="card">
+            <section class="edit-section">
+                <h2>Edit User</h2>
+                <p>Update the details for user <strong>{{ user.username }}</strong>. Leave password blank to keep current password.</p>
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" value="{{ user.username }}" required maxlength="150">
+
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" value="{{ user.email }}">
+
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}">
+
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Leave blank to keep current password">
+
+                    <div class="checkboxes">
+                        <label>
+                            <input type="checkbox" name="is_staff" {% if user.is_staff %}checked{% endif %}> Staff
+                        </label>
+                        <label>
+                            <input type="checkbox" name="is_superuser" {% if user.is_superuser %}checked{% endif %}> Superuser
+                        </label>
+                        <label>
+                            <input type="checkbox" name="is_active" {% if user.is_active %}checked{% endif %}> Active
+                        </label>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="save-btn">Save Changes</button>
+                        <a href="{% url 'view_users' %}" class="cancel-btn"><button type="button">Cancel</button></a>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            © 2025 RoomifyUAP | All Rights Reserved
+        </div>
+    </footer>
+</body>
+</html>

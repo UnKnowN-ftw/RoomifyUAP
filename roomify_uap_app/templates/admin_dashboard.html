@@ -17,9 +17,8 @@
         </div>
         <nav>
             <a href="{% url 'admin_dashboard' %}">Dashboard</a>
-            <a href="#">Users</a>
-            <a href="#">Settings</a>
-            <a href="{% url 'logout_user' %}">Logout</a>
+            <a href="{% url 'view_users' %}">Users</a>
+            <a href="{% url 'admin_logout' %}">Logout</a>
         </nav>
     </header>
 
@@ -27,6 +26,7 @@
     <main>
         <section class="dashboard-content">
             <h2>Admin Dashboard</h2>
+            <p>Welcome, {{ admin_user.last_name|default:admin_user.username }}!</p>
             <p>Manage owners and renters efficiently from this panel.</p>
 
             <!-- Owners Table -->

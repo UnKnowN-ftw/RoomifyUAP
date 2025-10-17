@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>RoomifyUAP | Delete User</title>
+    <link rel="stylesheet" href="{% static 'css/delete_user_styles.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/ROOMIFY.png' %}" alt="Roomify Logo" class="logo">
+            <h1>RoomifyUAP Admin</h1>
+        </div>
+        <nav>
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <a href="{% url 'view_users' %}">Users</a>
+            <a href="{% url 'admin_logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="table-section delete-section">
+            <h2>Delete User</h2>
+            <p>Are you sure you want to delete user <strong>{{ user.username }}</strong>? This action cannot be undone.</p>
+
+            <div class="delete-buttons">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Yes, Delete</button>
+                </form>
+                <a href="{% url 'view_users' %}" class="cancel-btn"><button type="button">Cancel</button></a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            © 2025 RoomifyUAP | All Rights Reserved
+        </div>
+    </footer>
+</body>
+</html>
