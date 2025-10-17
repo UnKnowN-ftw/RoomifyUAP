@@ -81,30 +81,56 @@ body {
   margin-bottom: 25px;
 }
 
-.search-bar {
+.search-section {
+  background-color: #f2d045; /* same yellow as first section */
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.search-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.search-section p {
+  font-size: 1.1rem;
+  color: #222;
+  margin-bottom: 30px;
+}
+
+.search-box {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
 }
 
-.search-bar input,
-.search-bar select {
-  padding: 10px;
-  border-radius: 5px;
+.search-box input[type="text"],
+.search-box input[type="date"] {
+  padding: 12px 16px;
+  font-size: 1rem;
   border: none;
-  outline: none;
-  min-width: 180px;
   border-radius: 10px;
+  width: 220px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.search-bar button {
+.search-box button {
+  padding: 12px 30px;
+  font-size: 1rem;
   background-color: #000;
   color: white;
   border: none;
-  padding: 15px 25px;
   border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #333;
 }
 
 .offers {
@@ -140,4 +166,29 @@ footer {
   color: white;
   padding: 15px;
   margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .owner-summary {
+    text-align: center;
+  }
+
+  .listing-container {
+    flex-direction: column;
+  }
+
+  .owner-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }
