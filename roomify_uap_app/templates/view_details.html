@@ -9,7 +9,7 @@
       type="image/png"
       href="{% static 'images/roomify_favicon.png' %}"
     />
-    <title>Room Details | Roomify UAP</title>
+    <title>{{ room.room_title }} | Roomify UAP</title>
     <link rel="stylesheet" href="{% static 'css/view_details_styles.css' %}" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
@@ -33,7 +33,9 @@
         <a href="#">My Bookings</a>
       </nav>
       <div class="profile-icon">
-        <i class="bx bx-user"></i>
+        <a href="{% url 'renter_profile' %}">
+          <i class="bx bx-user"></i>
+        </a>
         <a href="{% url 'logout_user' %}">Logout</a>
       </div>
     </header>
@@ -41,21 +43,19 @@
     <!-- Hero / Room Overview -->
     <section class="room-hero">
       <div class="hero-text">
-        <h1>Modern Single Room</h1>
-        <p><i class="bx bx-map"></i> Uttara, Dhaka</p>
-        <div class="rating"><i class="bx bxs-star"></i> 4.8 (24 reviews)</div>
+        <h1>{{ room.room_title }}</h1>
+        <p><i class="bx bx-map"></i> {{ room.location }}</p>
       </div>
     </section>
 
     <!-- Gallery Section -->
     <section class="room-gallery">
       <div class="main-image">
-        <img src="{% static 'images/room2.jpg' %}" alt="Image" />
-      </div>
-      <div class="side-images">
-        <img src="{% static 'images/hostel room bg.jpg' %}" alt="Room Image" />
-        <img src="{% static 'images/room1.jpg' %}" alt="Default Image" />
-        <img src="{% static 'images/room2.jpg' %}" alt="Default Image" />
+        {% if room.image %}
+          <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
+        {% else %}
+          <img src="{% static 'images/default-room.jpg' %}" alt="Default Room" />
+        {% endif %}
       </div>
     </section>
 
@@ -63,28 +63,25 @@
     <section class="room-details">
       <div class="details-info">
         <h2>Room Overview</h2>
-        <p>
-          This modern single room offers a cozy and private space for students.
-          It includes attached bathroom, air conditioning, and high-speed WiFi.
-          Located in a safe and peaceful neighborhood near UAP.
-        </p>
+        <p>{{ room.description }}</p>
 
-        <h3>Amenities</h3>
+        <h3>Details</h3>
         <div class="amenities">
-          <span> WiFi</span>
-          <span> Air Conditioning</span>
-          <span> Attached Bath</span>
-          <span> Common Kitchen</span>
+          <span>{{ room.room_size }} sq ft</span>
+          <span>{{ room.occupancy }} person{% if room.occupancy > 1 %}s{% endif %}</span>
+          <span>৳{{ room.rent }} / month</span>
         </div>
       </div>
 
       <aside class="booking-card">
-        <h3>৳8,000 / month</h3>
-        <p>1 bed • 120 sq ft</p>
+        <h3>৳{{ room.rent }} / month</h3>
+        <p>{{ room.occupancy }} bed • {{ room.room_size }} sq ft</p>
         <button class="book-btn">Book Now</button>
         <div class="contact-owner">
-          <p><i class="bx bx-phone"></i> +8801XXXXXXX</p>
-          <p><i class="bx bx-envelope"></i> owner@example.com</p>
+          <p><i class="bx bx-user"></i> {{ room.owner.username }}</p>
+          {% if room.owner.email %}
+          <p><i class="bx bx-envelope"></i> {{ room.owner.email }}</p>
+          {% endif %}
         </div>
       </aside>
     </section>
