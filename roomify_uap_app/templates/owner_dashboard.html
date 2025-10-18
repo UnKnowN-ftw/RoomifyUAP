@@ -21,7 +21,7 @@
   </head>
   <body>
     <!-- Navbar -->
-    <header class="navbar">
+     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
         <div>
@@ -36,12 +36,12 @@
         <a href="#">Messages</a>
       </nav>
       <div class="profile-icon">
-        <a href="{% url 'renter_profile' %}">
+        <a href="{% url 'owner_profile' %}">
           <i class="bx bx-user"></i>
         </a>
         <a href="{% url 'logout_user' %}">Logout</a>
       </div>
-    </header>
+    </header> 
 
     <!-- Owner Overview Section -->
     <section class="owner-summary">

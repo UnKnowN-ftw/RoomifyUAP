@@ -9,8 +9,8 @@
       type="image/png"
       href="{% static 'images/roomify_favicon.png' %}"
     />
-    <title>Renter Profile</title>
-    <link rel="stylesheet" href="{% static 'css/owner_profile_styles.css' %}" />
+    <title>Owner Profile</title>
+    <link rel="stylesheet" href="{% static 'css/owner_profile_styels.css' %}" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
@@ -18,15 +18,15 @@
   </head>
 
   <body>
-    <!-- ===== HEADER / NAVBAR ===== -->
-    <!-- <header class="navbar">
+    <!-- ===== HEADER / NAVBAR ===== --> 
+     <!-- <header class="navbar">
         <div class="logo">
             <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
             <div>
                 <h2>Roomify UAP</h2>
                 <p>Find Your Space</p>
             </div>
-        </div>
+        </div> 
 
         <nav class="nav-links">
             <a href="#">Home</a>
@@ -38,9 +38,9 @@
             <i class="bx bx-user"></i>
             <a href="{% url 'logout_user' %}">Logout</a>
         </div>
-    </header> -->
+    </header>  -->
 
-    <!-- ===== MAIN PROFILE CONTENT ===== -->
+     <!-- ===== MAIN PROFILE CONTENT =====  -->
     <div class="profile-container">
       <!-- Profile Header -->
       <header class="profile-header">
@@ -52,7 +52,7 @@
           />
           <div class="user-details">
             <div class="name-status">
-              <h1>Renter Name</h1>
+              <h1>Owner Name</h1>
               <span class="unverified-tag">Unverified</span>
             </div>
             <p class="member-info">
@@ -125,7 +125,7 @@
             <input
               type="text"
               id="student-id"
-              placeholder="Enter your student ID"
+              placeholder="Enter your NID ID"
             />
           </div>
 
@@ -179,17 +179,16 @@
 
       <!-- Verification Section -->
       <section class="student-verification-section">
-        <h2>Student Verification</h2>
+        <h2>Owner Verification</h2>
         <p class="section-description">
-          Verify your student status to access exclusive student rates and
-          trusted listings.
+          Verify your owner status to add your property details
         </p>
 
         <div class="verification-box">
           <i class="bx bx-info-circle info-icon"></i>
           <div class="verification-content">
             <h3>Verification Required</h3>
-            <p>To complete student verification, please provide:</p>
+            <p>To complete owner verification, please provide:</p>
             <ul>
               <li>Government issued <strong>photo ID(NID/Passport)</strong></li>
               <li><strong>Proof of</strong> property ownership documents</li>
