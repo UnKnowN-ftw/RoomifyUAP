@@ -34,4 +34,10 @@ urlpatterns = [
 
     path('room/<int:room_id>/', views.view_details, name='view_details'),
 
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/respond/<int:request_id>/<str:action>/', views.respond_request, name='respond_request'),
+
+    path('booking/accept/<int:req_id>/', views.booking_accept, name='booking_accept'),
+    path('booking/reject/<int:req_id>/', views.booking_reject, name='booking_reject'),
+
 ]

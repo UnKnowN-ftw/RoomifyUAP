@@ -76,7 +76,11 @@
       <aside class="booking-card">
         <h3>৳{{ room.rent }} / month</h3>
         <p>{{ room.occupancy }} bed • {{ room.room_size }} sq ft</p>
-        <button class="book-btn">Book Now</button>
+        <form method="POST">
+          {% csrf_token %}
+          <button type="submit" class="book-btn">Book Now</button>
+        </form>
+
         <div class="contact-owner">
           <p><i class="bx bx-user"></i> {{ room.owner.username }}</p>
           {% if room.owner.email %}

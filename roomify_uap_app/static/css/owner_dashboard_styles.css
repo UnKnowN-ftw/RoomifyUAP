@@ -333,3 +333,99 @@ body {
   font-size: 14px;
   border-top: 1px solid #5e3b7e;
 }
+
+.notification-icon {
+  position: relative;
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.notification-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.bx-bell {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.notif-count {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 50%;
+}
+
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 320px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 350px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.notif-item {
+  padding: 12px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.notif-item p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn,
+.reject-btn {
+  padding: 6px 12px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.accept-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.no-notifs {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
