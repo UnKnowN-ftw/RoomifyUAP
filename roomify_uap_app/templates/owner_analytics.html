@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+  <title>Analytics - Roomify UAP</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/owner_pages_styles.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">
+    <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+    <div><h2>Roomify UAP</h2><p>Owner Dashboard</p></div>
+  </div>
+  <nav class="nav-links">
+    <a href="{% url 'owner_dashboard' %}">Home</a>
+    <a href="{% url 'owner_listings' %}">My Listings</a>
+    <a class="active" href="{% url 'owner_analytics' %}">Analytics</a>
+    <a href="{% url 'owner_messages' %}">Messages</a>
+  </nav>
+  <div class="profile-icon">
+    <i class="bx bx-user"></i>
+    <a href="{% url 'logout_user' %}">Logout</a>
+  </div>
+</header>
+
+<section class="page-header">
+  <h1>Monthly Analytics Overview</h1>
+  <p>Track your performance and growth metrics for this month.</p>
+</section>
+
+<section class="analytics-cards">
+  <div class="analytic-card">
+    <h3>Total Views</h3>
+    <h2>{{ total_views }}</h2>
+    <p>{{ monthly_views_count }} this month</p>
+  </div>
+  <div class="analytic-card">
+    <h3>Total Revenue</h3>
+    <h2>৳{{ total_revenue }}</h2>
+    <p>This month</p>
+  </div>
+  <div class="analytic-card">
+    <h3>Average Occupancy</h3>
+    <h2>{{ occupancy_rate }}%</h2>
+    <p>Across all rooms</p>
+  </div>
+  <div class="analytic-card">
+    <h3>Renters Contacted</h3>
+    <h2>{{ total_messages }}</h2>
+    <p>Messages received</p>
+  </div>
+</section>
+
+<section class="chart-section">
+  <canvas id="viewsChart"></canvas>
+</section>
+
+<script>
+  // Monthly chart arrays
+  var labels = [];
+  {% for label in labels %}
+    labels.push("{{ label }}");
+  {% endfor %}
+
+  var monthlyViews = [];
+  {% for view in monthly_views %}
+    monthlyViews.push({{ view }});
+  {% endfor %}
+
+  var ctx = document.getElementById('viewsChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Daily Views This Month',
+        data: monthlyViews,
+        backgroundColor: '#4c0685',
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Roomify UAP</h3>
+          <p>Empowering hostel and rental owners with smart tools.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Email: support@roomifyuap.com</li>
+            <li>Phone: +8801796968195</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+    </footer>
+</body>
+</html>

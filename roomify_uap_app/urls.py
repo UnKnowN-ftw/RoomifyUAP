@@ -18,6 +18,10 @@ urlpatterns = [
     path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
     
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+    path('owner/listings/', views.owner_listings, name='owner_listings'),
+    path('owner/analytics/', views.owner_analytics, name='owner_analytics'),
+    path('owner/messages/', views.owner_messages, name='owner_messages'),
+    path('send-message/<int:listing_id>/', views.send_message, name='send_message'),
     path('post-new-listing/', views.post_new_listing, name='post_new_listing'),
 
     path('dashboard/admin/login/', views.admin_login, name='admin_login'),

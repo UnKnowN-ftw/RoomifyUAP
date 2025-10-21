@@ -18,6 +18,8 @@ body {
 }
 
 .container {
+    opacity: 1;
+    transition: opacity 0.4s ease;
     width: 380px;
     margin: 40px auto;
     backdrop-filter: blur(10px);
@@ -41,24 +43,41 @@ h1 {
 }
 
 .tab-buttons {
+    position: relative;
     display: flex;
     justify-content: space-around;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ccc;
 }
 
 .tab-button {
-    padding: 12px 40px;
+    flex: 1;
+    background: none;
     border: none;
-    background: #ecf0f1;
+    padding: 12px 0;
     cursor: pointer;
-    font-size: 18px;
-    border-radius: 25px;
-    transition: background 0.5s;
+    font-size: 16px;
+    position: relative;
+    transition: color 0.3s ease;
+    color: #aaa;
 }
 
 .tab-button.active {
     background: #3498db;
     color: white;
+}
+
+.tab-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    /* half width since there are 2 buttons */
+    height: 3px;
+    background-color: #00bcd4;
+    transition: transform 0.3s ease;
+    transform: translateX(0%);
+    border-radius: 2px;
 }
 
 .option-button {

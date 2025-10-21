@@ -16,8 +16,9 @@
 
       <!-- Tabs for Login / Register -->
       <div class="tab-buttons">
-        <button class="tab-button active" onclick="goToLogin()">Login</button>
-        <button class="tab-button" onclick="goToRegister()">Register</button>
+        <button id="login-tab" class="tab-button active" onclick="goToLogin()">Login</button>
+        <button id="register-tab" class="tab-button" onclick="goToRegister()">Register</button>
+        <div class="tab-indicator"></div>
       </div>
 
       <!-- Login -->
@@ -84,29 +85,38 @@
     </div>
 
 <script>
-  function showSection(id) {
-    document.querySelectorAll('.tab-content').forEach((el) => el.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-
-    const tabButtons = document.querySelectorAll('.tab-button');
-    if (id === 'login-options' || id.startsWith('login-')) {
-      tabButtons[0].classList.add('active');
-      tabButtons[1].classList.remove('active');
-    } else if (id === 'register-options' || id.startsWith('register-')) {
-      tabButtons[0].classList.remove('active');
-      tabButtons[1].classList.add('active');
-    }
-  }
-
   function goToLogin() {
-    history.pushState({}, '', '/login/user/');
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('login-tab').classList.add('active');
+    document.querySelector('.tab-indicator').style.transform = 'translateX(0%)';
+
     showSection('login-options');
+
+    history.pushState({}, '', '/login/user/');
   }
 
   function goToRegister() {
-    history.pushState({}, '', '/register/user/');
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('register-tab').classList.add('active');
+    document.querySelector('.tab-indicator').style.transform = 'translateX(100%)';
+
     showSection('register-options');
+
+    history.pushState({}, '', '/register/user/');
   }
+
+  function showSection(id) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  window.onpopstate = function() {
+    if (window.location.pathname.includes('/register/user/')) {
+      goToRegister();
+    } else {
+      goToLogin();
+    }
+  };
 </script>
 
   </body>

@@ -30,10 +30,10 @@
         </div>
       </div>
       <nav class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">My Listings</a>
-        <a href="#">Analytics</a>
-        <a href="#">Messages</a>
+        <a href="{% url 'owner_dashboard' %}">Home</a>
+        <a href="{% url 'owner_listings' %}">My Listings</a>
+        <a href="{% url 'owner_analytics' %}">Analytics</a>
+        <a href="{% url 'owner_messages' %}">Messages</a>
       </nav>
       <div class="profile-icon">
         <i class="bx bx-user"></i>
@@ -135,10 +135,10 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">My Listings</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Messages</a></li>
+            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
             <li><a href="#">FAQ</a></li>
           </ul>
         </div>

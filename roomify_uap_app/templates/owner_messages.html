@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>Messages - Roomify UAP</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/owner_pages_styles.css' %}" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div>
+          <h2>Roomify UAP</h2>
+          <p>Owner Dashboard</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{% url 'owner_dashboard' %}">Home</a>
+        <a href="{% url 'owner_listings' %}">My Listings</a>
+        <a href="{% url 'owner_analytics' %}">Analytics</a>
+        <a class="active" href="#">Messages</a>
+      </nav>
+      <div class="profile-icon">
+        <i class="bx bx-user"></i>
+        <a href="{% url 'logout_user' %}">Logout</a>
+      </div>
+    </header>
+
+    <section class="page-header">
+      <h1>Messages</h1>
+      <p>Communicate with tenants and potential renters.</p>
+    </section>
+
+    <section class="messages-container">
+      <div class="message-card">
+        <h3>Ahmed Khan</h3>
+        <p><strong>Room:</strong> Modern Single Room</p>
+        <p>"Hello, is this room still available?"</p>
+        <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
+      </div>
+
+      <div class="message-card">
+        <h3>Sarah Rahman</h3>
+        <p><strong>Room:</strong> Cozy Shared Room</p>
+        <p>"Can I schedule a visit for tomorrow evening?"</p>
+        <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
+      </div>
+
+      <div class="message-card">
+        <h3>Jubair Hossain</h3>
+        <p><strong>Room:</strong> Premium Double Room</p>
+        <p>"Do you allow pets in the apartment?"</p>
+        <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Roomify UAP</h3>
+          <p>Empowering hostel and rental owners with smart tools.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Email: support@roomifyuap.com</li>
+            <li>Phone: +8801796968195</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+    </footer>
+  </body>
+</html>
