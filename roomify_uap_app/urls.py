@@ -16,12 +16,18 @@ urlpatterns = [
 
     # Dashboards
     path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
-    
+    path('dashboard/renter/profile/', views.renter_profile, name='renter_profile'),
+
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+<<<<<<< HEAD
     path('owner/listings/', views.owner_listings, name='owner_listings'),
     path('owner/analytics/', views.owner_analytics, name='owner_analytics'),
     path('owner/messages/', views.owner_messages, name='owner_messages'),
     path('send-message/<int:listing_id>/', views.send_message, name='send_message'),
+=======
+    path('dashboard/owner/profile/', views.owner_profile, name='owner_profile'),
+
+>>>>>>> 74b3242f5f29275718aa6d794558dc17002f123d
     path('post-new-listing/', views.post_new_listing, name='post_new_listing'),
 
     path('dashboard/admin/login/', views.admin_login, name='admin_login'),
@@ -34,5 +40,11 @@ urlpatterns = [
     path('dashboard/admin/logout/', views.admin_logout, name='admin_logout'),
 
     path('room/<int:room_id>/', views.view_details, name='view_details'),
+
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/respond/<int:request_id>/<str:action>/', views.respond_request, name='respond_request'),
+
+    path('booking/accept/<int:req_id>/', views.booking_accept, name='booking_accept'),
+    path('booking/reject/<int:req_id>/', views.booking_reject, name='booking_reject'),
 
 ]

@@ -21,7 +21,7 @@
   </head>
   <body>
     <!-- Navbar -->
-    <header class="navbar">
+     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
         <div>
@@ -36,10 +36,40 @@
         <a href="{% url 'owner_messages' %}">Messages</a>
       </nav>
       <div class="profile-icon">
-        <i class="bx bx-user"></i>
-        <a href="{% url 'logout_user' %}">Logout</a>
-      </div>
-    </header>
+  <!-- Notification Bell + Dropdown -->
+  <div class="notification-wrapper">
+    <i class="bx bx-bell" id="notifBell"></i>
+    {% if notification_count > 0 %}
+      <span class="notif-count">{{ notification_count }}</span>
+    {% endif %}
+
+    <div class="notif-dropdown" id="notifDropdown">
+      {% for req in notifications %}
+        <div class="notif-item">
+          <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
+          <div class="notif-actions">
+            <form method="POST" action="{% url 'booking_accept' req.id %}">
+              {% csrf_token %}
+              <button type="submit" class="accept-btn">Accept</button>
+            </form>
+            <form method="POST" action="{% url 'booking_reject' req.id %}">
+              {% csrf_token %}
+              <button type="submit" class="reject-btn">Reject</button>
+            </form>
+          </div>
+        </div>
+      {% empty %}
+        <p class="no-notifs">No new requests</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Profile + Logout -->
+  <a href="{% url 'owner_profile' %}"><i class="bx bx-user"></i></a>
+  <a href="{% url 'logout_user' %}">Logout</a>
+</div>
+
+    </header> 
 
     <!-- Owner Overview Section -->
     <section class="owner-summary">
@@ -79,52 +109,30 @@
       <p>Manage and monitor your hostel rooms</p>
 
       <div class="listing-container">
-        <!-- Listing 1 -->
-        <div class="owner-card">
-          <img
-            src="{% static 'images/modern-single-room.jpg' %}"
-            alt="Room 1"
-          />
-          <div class="info">
-            <h3>Modern Single Room</h3>
-            <p>Uttara, Dhaka</p>
-            <p>৳8,000/month | 120 sq ft | 0/1 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
+  {% if listings %}
+    {% for room in listings %}
+      <div class="owner-card">
+        {% if room.image %}
+          <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
+        {% else %}
+          <img src="{% static 'images/default-room.jpg' %}" alt="Room" />
+        {% endif %}
+        <div class="info">
+          <h3>{{ room.room_title }}</h3>
+          <p>{{ room.location }}</p>
+          <p>৳{{ room.rent }}/month | {{ room.room_size }} sq ft | {{ room.occupancy }}/{{ room.max_occupancy }} occupied</p>
         </div>
-
-        <!-- Listing 2 -->
-        <div class="owner-card">
-          <img src="{% static 'images/cozy-shared-room.jpg' %}" alt="Room 2" />
-          <div class="info">
-            <h3>Cozy Shared Room</h3>
-            <p>Banani, Dhaka</p>
-            <p>৳5,000/month | 180 sq ft | 2/2 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
-        </div>
-
-        <!-- Listing 3 -->
-        <div class="owner-card">
-          <img src="{% static 'images/premium-room.jpg' %}" alt="Room 3" />
-          <div class="info">
-            <h3>Premium Double Room</h3>
-            <p>Gulshan, Dhaka</p>
-            <p>৳12,000/month | 200 sq ft | 0/2 occupied</p>
-          </div>
-          <div class="actions">
-            <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-            <button class="view"><i class="bx bx-show"></i> View</button>
-          </div>
+        <div class="actions">
+          <button type="button">Edit</button>
+          <button type="button">View</button>
         </div>
       </div>
-    </section>
+    {% endfor %}
+  {% else %}
+    <p>You haven't posted any listings yet.</p>
+  {% endif %}
+</div>
+
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
@@ -154,5 +162,21 @@
 
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
+
+  <script>
+  document.getElementById("notifBell").addEventListener("click", function () {
+    const dropdown = document.getElementById("notifDropdown");
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+  });
+
+  document.addEventListener("click", function (e) {
+    const dropdown = document.getElementById("notifDropdown");
+    const bell = document.getElementById("notifBell");
+    if (!dropdown.contains(e.target) && e.target !== bell) {
+      dropdown.style.display = "none";
+    }
+  });
+</script>
+
   </body>
 </html>

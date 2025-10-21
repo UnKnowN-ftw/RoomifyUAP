@@ -37,6 +37,7 @@ class Listing(models.Model):
     def __str__(self):
         return self.room_title
 
+<<<<<<< HEAD
 class ListingView(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='views')
     viewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -55,3 +56,19 @@ class Message(models.Model):
 
     def __str__(self):
         return f"From {self.sender.username} to {self.receiver.username}"
+=======
+class BookingRequest(models.Model):
+    renter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_requests')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_requests')
+    listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=10,
+        choices=[('pending', 'Pending'), ('accepted', 'Accepted'), ('rejected', 'Rejected')],
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.renter.username} -> {self.owner.username} ({self.status})"
+
+>>>>>>> 74b3242f5f29275718aa6d794558dc17002f123d

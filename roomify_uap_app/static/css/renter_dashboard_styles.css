@@ -355,3 +355,20 @@ body {
   font-size: 14px;
   border-top: 1px solid #5e3b7e;
 }
+
+.notification-icon {
+  position: relative;
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 12px;
+}
