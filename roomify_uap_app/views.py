@@ -7,13 +7,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile, Listing, ListingView, Message
 from .models import Owner, Renter
-<<<<<<< HEAD
-from django.utils import timezone
-from datetime import datetime, timedelta
-=======
+from datetime import datetime
 from .models import BookingRequest
+from django.db.models import Count, Sum
 
->>>>>>> 74b3242f5f29275718aa6d794558dc17002f123d
 
 def home(request):
     if request.user.is_authenticated:
@@ -26,7 +23,6 @@ def home(request):
     return render(request, 'homepage.html')
 
 
-<<<<<<< HEAD
 # Decorator for role-based access
 def role_required(role):
     def decorator(view_func):
@@ -41,9 +37,6 @@ def role_required(role):
 
 
 @role_required('renter')
-=======
-@login_required
->>>>>>> 74b3242f5f29275718aa6d794558dc17002f123d
 def renter_dashboard(request):
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'renter':
@@ -64,11 +57,7 @@ def renter_dashboard(request):
     })
 
 
-<<<<<<< HEAD
-@role_required('owner')
-=======
 @login_required
->>>>>>> 74b3242f5f29275718aa6d794558dc17002f123d
 def owner_dashboard(request):
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'owner':
@@ -228,42 +217,35 @@ def owner_listings(request):
 @login_required
 @role_required('owner')
 def owner_analytics(request):
-    user = request.user
+    owner = request.user
+    listings = Listing.objects.filter(owner=owner)
 
-    # All listings of the owner
-    listings = Listing.objects.filter(owner=user)
+    total_views = ListingView.objects.filter(listing__in=listings).count()
+    total_revenue = BookingRequest.objects.filter(
+        listing__in=listings, status='accepted'
+    ).count() * 1000  # Example: assuming each accepted booking = 1000৳, adjust as needed
 
-    # Total revenue (sum of rent of occupied rooms)
-    total_revenue = sum([listing.rent for listing in listings if listing.occupied])
-
-    # Occupancy rate
     total_rooms = listings.count()
     occupied_rooms = listings.filter(occupied=True).count()
-    occupancy_rate = round((occupied_rooms / total_rooms) * 100, 2) if total_rooms else 0
+    occupancy_rate = round((occupied_rooms / total_rooms) * 100, 2) if total_rooms > 0 else 0
 
-    # Messages received
-    total_messages = Message.objects.filter(listing__owner=user).count()
+    total_messages = Message.objects.filter(listing__in=listings).count()
 
-    # Monthly views
-    now = timezone.now()
-    start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    month_views = ListingView.objects.filter(listing__owner=user, timestamp__gte=start_of_month)
+    today = datetime.now()
+    this_month = today.month
+    this_year = today.year
 
-    # Prepare chart data: daily views in the current month
-    daily_views_dict = {}
-    for day_offset in range(now.day):
-        day = start_of_month + timedelta(days=day_offset)
-        day_str = day.strftime('%b %d')  # e.g., "Oct 01"
-        daily_views_dict[day_str] = 0
+    monthly_views = (
+        ListingView.objects
+        .filter(listing__in=listings, timestamp__year=this_year, timestamp__month=this_month)
+        .extra({'day': "date(timestamp)"})
+        .values('day')
+        .annotate(count=Count('id'))
+        .order_by('day')
+    )
 
-    for view in month_views:
-        day_str = view.timestamp.strftime('%b %d')
-        if day_str in daily_views_dict:
-            daily_views_dict[day_str] += 1
-
-    labels = list(daily_views_dict.keys())
-    daily_views = list(daily_views_dict.values())
-    total_views = sum(daily_views)
+    labels = [v['day'].strftime("%b %d") for v in monthly_views]
+    daily_views = [v['count'] for v in monthly_views]
 
     context = {
         'total_views': total_views,
@@ -271,7 +253,7 @@ def owner_analytics(request):
         'occupancy_rate': occupancy_rate,
         'total_messages': total_messages,
         'labels': labels,
-        'daily_views': daily_views,
+        'daily_views': daily_views
     }
 
     return render(request, 'owner_analytics.html', context)

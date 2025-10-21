@@ -38,7 +38,7 @@
   <div class="analytic-card">
     <h3>Total Views</h3>
     <h2>{{ total_views }}</h2>
-    <p>{{ monthly_views_count }} this month</p>
+    <p>This month: {{ daily_views|length }}</p>
   </div>
   <div class="analytic-card">
     <h3>Total Revenue</h3>
@@ -62,25 +62,17 @@
 </section>
 
 <script>
-  // Monthly chart arrays
-  var labels = [];
-  {% for label in labels %}
-    labels.push("{{ label }}");
-  {% endfor %}
+  const labels = {{ labels|safe }};
+  const dailyViews = {{ daily_views|safe }};
 
-  var monthlyViews = [];
-  {% for view in monthly_views %}
-    monthlyViews.push({{ view }});
-  {% endfor %}
-
-  var ctx = document.getElementById('viewsChart');
+  const ctx = document.getElementById('viewsChart');
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [{
         label: 'Daily Views This Month',
-        data: monthlyViews,
+        data: dailyViews,
         backgroundColor: '#4c0685',
       }]
     },
@@ -96,34 +88,35 @@
   });
 </script>
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Roomify UAP</h3>
-          <p>Empowering hostel and rental owners with smart tools.</p>
-        </div>
 
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
-            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
-            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
-            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
-            <li><a href="#">FAQ</a></li>
-          </ul>
-        </div>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Roomify UAP</h3>
+      <p>Empowering hostel and rental owners with smart tools.</p>
+    </div>
 
-        <div class="footer-section">
-          <h4>Contact Us</h4>
-          <ul>
-            <li>Email: support@roomifyuap.com</li>
-            <li>Phone: +8801796968195</li>
-          </ul>
-        </div>
-      </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+        <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+        <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+        <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
 
-      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
-    </footer>
+    <div class="footer-section">
+      <h4>Contact Us</h4>
+      <ul>
+        <li>Email: support@roomifyuap.com</li>
+        <li>Phone: +8801796968195</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+</footer>
 </body>
 </html>
