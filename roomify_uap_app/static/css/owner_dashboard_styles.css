@@ -271,8 +271,8 @@ body {
   }
 }
 
-/* ==== Footer Styling ==== */
 
+/* ==== Footer Styling (Updated) ==== */
 .footer {
   background: #4c0685;
   color: white;
@@ -333,6 +333,7 @@ body {
   font-size: 14px;
   border-top: 1px solid #5e3b7e;
 }
+
 
 .notification-icon {
   position: relative;
