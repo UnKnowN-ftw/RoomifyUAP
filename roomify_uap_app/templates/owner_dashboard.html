@@ -4,74 +4,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="{% static 'images/roomify_favicon.png' %}"
-    />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
     <title>Roomify UAP - Owner Dashboard</title>
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'css/owner_dashboard_styles.css' %}"
-    />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/owner_dashboard_styles.css' %}" />
   </head>
   <body>
     <!-- Navbar -->
-     <header class="navbar">
+    <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
-        <div>
+        <div class="logo-text">
           <h2>Roomify UAP</h2>
           <p>Owner Dashboard</p>
         </div>
       </div>
+
       <nav class="nav-links">
         <a href="{% url 'owner_dashboard' %}">Home</a>
         <a href="{% url 'owner_listings' %}">My Listings</a>
         <a href="{% url 'owner_analytics' %}">Analytics</a>
-        <a href="{% url 'owner_messages' %}">Messages</a>
       </nav>
-      <div class="profile-icon">
-  <!-- Notification Bell + Dropdown -->
-  <div class="notification-wrapper">
-    <i class="bx bx-bell" id="notifBell"></i>
-    {% if notification_count > 0 %}
-      <span class="notif-count">{{ notification_count }}</span>
-    {% endif %}
 
-    <div class="notif-dropdown" id="notifDropdown">
-      {% for req in notifications %}
-        <div class="notif-item">
-          <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
-          <div class="notif-actions">
-            <form method="POST" action="{% url 'booking_accept' req.id %}">
-              {% csrf_token %}
-              <button type="submit" class="accept-btn">Accept</button>
-            </form>
-            <form method="POST" action="{% url 'booking_reject' req.id %}">
-              {% csrf_token %}
-              <button type="submit" class="reject-btn">Reject</button>
-            </form>
+      <div class="profile-section">
+        <!-- Notifications -->
+        <div class="notification-icon">
+          <i class="bx bx-bell" id="notifBell"></i>
+          {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+              <div class="notif-item">
+                <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
+                <div class="notif-actions">
+                  <form method="POST" action="{% url 'booking_accept' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="accept-btn">Accept</button>
+                  </form>
+                  <form method="POST" action="{% url 'booking_reject' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="reject-btn">Reject</button>
+                  </form>
+                </div>
+              </div>
+            {% empty %}
+              <p class="no-notifs">No new requests</p>
+            {% endfor %}
           </div>
         </div>
-      {% empty %}
-        <p class="no-notifs">No new requests</p>
-      {% endfor %}
-    </div>
-  </div>
 
-  <!-- Profile + Logout -->
-  <a href="{% url 'owner_profile' %}"><i class="bx bx-user"></i></a>
-  <a href="{% url 'logout_user' %}">Logout</a>
-</div>
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown">
+          <i class="bx bx-user"></i>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'owner_profile' %}">Profile</a></li>
+            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+            <li><a href="{% url 'logout_user' %}" class="logout-link">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
 
-    </header> 
-
-    <!-- Owner Overview Section -->
+    <!-- Owner Summary -->
     <section class="owner-summary">
       <h1>Welcome back, Owner!</h1>
       <p>Manage your hostel listings and track performance</p>
@@ -100,46 +95,56 @@
       </div>
 
       <a href="{% url 'post_new_listing' %}" class="new-listing-btn">+ Post New Listing</a>
-
     </section>
 
     <!-- Active Listings -->
     <section class="active-listings">
-      <h2>Your Active Listings</h2>
-      <p>Manage and monitor your hostel rooms</p>
-
-      <div class="listing-container">
-  {% if listings %}
-    {% for room in listings %}
-      <div class="owner-card">
-        {% if room.image %}
-          <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
-        {% else %}
-          <img src="{% static 'images/default-room.jpg' %}" alt="Room" />
-        {% endif %}
-        <div class="info">
-          <h3>{{ room.room_title }}</h3>
-          <p>{{ room.location }}</p>
-          <p>৳{{ room.rent }}/month | {{ room.room_size }} sq ft | {{ room.occupancy }}/{{ room.max_occupancy }} occupied</p>
-        </div>
-        <div class="actions">
-          <button type="button">Edit</button>
-          <button type="button">View</button>
-        </div>
+      <div class="listings-header">
+        <h2>Your Active Listings</h2>
+        <p>Manage and monitor your hostel rooms</p>
       </div>
-    {% endfor %}
-  {% else %}
-    <p>You haven't posted any listings yet.</p>
-  {% endif %}
-</div>
 
+      <div class="card-grid">
+        {% if listings %}
+          {% for room in listings %}
+            <div class="listing-card">
+              <div class="card-image">
+                {% if room.image %}
+                  <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
+                {% else %}
+                  <img src="{% static 'images/default-room.jpg' %}" alt="Room" />
+                {% endif %}
+              </div>
+              <div class="card-content">
+                <h3>{{ room.room_title }}</h3>
+                <p class="location">{{ room.location }}</p>
+                <div class="tags">
+                  <span>{{ room.room_size }} sq ft</span>
+                  <span>{{ room.occupancy }}/{{ room.max_occupancy }} occupied</span>
+                </div>
+                <div class="price-details">
+                  <h4>৳{{ room.rent }}<span>/month</span></h4>
+                </div>
+                <div class="actions">
+                  <button class="edit">Edit</button>
+                  <button class="view">View</button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No listings available.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
           <h3>Roomify UAP</h3>
           <p>Empowering hostel and rental owners with smart tools.</p>
         </div>
-
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
@@ -147,10 +152,8 @@
             <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
             <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
             <li><a href="{% url 'owner_messages' %}">Messages</a></li>
-            <li><a href="#">FAQ</a></li>
           </ul>
         </div>
-
         <div class="footer-section">
           <h4>Contact Us</h4>
           <ul>
@@ -159,24 +162,26 @@
           </ul>
         </div>
       </div>
-
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
 
-  <script>
-  document.getElementById("notifBell").addEventListener("click", function () {
-    const dropdown = document.getElementById("notifDropdown");
-    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
-  });
+    <script>
+      // Notification dropdown
+      const notifBell = document.getElementById('notifBell');
+      const notifDropdown = document.getElementById('notifDropdown');
+      notifBell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notifDropdown.classList.toggle('show');
+      });
+      document.addEventListener('click', () => notifDropdown.classList.remove('show'));
 
-  document.addEventListener("click", function (e) {
-    const dropdown = document.getElementById("notifDropdown");
-    const bell = document.getElementById("notifBell");
-    if (!dropdown.contains(e.target) && e.target !== bell) {
-      dropdown.style.display = "none";
-    }
-  });
-</script>
-
+      // Profile dropdown
+      const profileDropdown = document.querySelector('.profile-dropdown');
+      profileDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+      });
+      document.addEventListener('click', () => profileDropdown.classList.remove('active'));
+    </script>
   </body>
 </html>

@@ -4,55 +4,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="{% static 'images/roomify_favicon.png' %}"
-    />
-    <title>Renter Profile</title>
-    <link
-      rel="stylesheet"
-      href="{% static 'css/renter_profile_styles.css' %}"
-    />
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>Roomify UAP - Renter Profile</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/renter_profile_styles.css' %}" />
   </head>
-
   <body>
-    <!-- ===== HEADER / NAVBAR ===== -->
-    <!-- <header class="navbar">
-        <div class="logo">
-            <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
-            <div>
-                <h2>Roomify UAP</h2>
-                <p>Find Your Space</p>
-            </div>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div class="logo-text">
+          <h2>Roomify UAP</h2>
+          <p>Find Your Space</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="#">Favorites</a>
+        <a href="#">My Bookings</a>
+      </nav>
+      <div class="profile-icon">
+        <!-- Bell Icon for Notifications -->
+        <div class="notification-icon">
+          <a href="{% url 'notifications' %}" class="notification-icon">
+            <i class="bx bx-bell"></i>
+            {% if notification_count > 0 %}
+              <span class="notification-badge">{{ notification_count }}</span>
+            {% endif %}
+          </a>
         </div>
 
-        <nav class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Favorites</a>
-            <a href="#">My Bookings</a>
-        </nav>
-
-        <div class="profile-icon">
-            <i class="bx bx-user"></i>
-            <a href="{% url 'logout_user' %}">Logout</a>
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown">
+          <i class="bx bx-user"></i>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{% url 'renter_profile' %}">Profile</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
+            </li>
+          </ul>
         </div>
-    </header> -->
+      </div>
+    </header>
 
-    <!-- ===== MAIN PROFILE CONTENT ===== -->
-    <div class="profile-container">
+    <!-- Profile Section -->
+    <section class="profile-container">
       <!-- Profile Header -->
-      <header class="profile-header">
+      <div class="profile-header">
         <div class="user-summary">
-          <img
-            src="{% static 'images/placeholder-avatar.png' %}"
-            alt="User Avatar"
-            class="avatar-img"
-          />
+          <img src="{% static 'images/placeholder-avatar.png' %}" alt="Avatar" class="avatar-img" />
           <div class="user-details">
             <div class="name-status">
               <h1>Renter Name</h1>
@@ -63,7 +69,6 @@
             </p>
           </div>
         </div>
-
         <div class="stats-and-edit">
           <div class="stats-grid">
             <div class="stat-item">
@@ -83,38 +88,23 @@
               <span class="stat-label">Reviews</span>
             </div>
           </div>
-          <button class="edit-photo-btn">
-            <i class="bx bx-camera"></i> Edit Profile Photo
-          </button>
+          <button class="edit-photo-btn"><i class="bx bx-camera"></i> Edit Profile Photo</button>
         </div>
-      </header>
+      </div>
 
-      <!-- Personal Information Section -->
+      <!-- Personal Information -->
       <section class="personal-info-section">
         <h2>Personal Information</h2>
-        <p class="section-description">
-          Manage your personal details and contact information.
-        </p>
-
+        <p class="section-description">Manage your personal details and contact info.</p>
         <div class="info-grid">
           <div class="info-field">
             <label for="full-name">Full Name</label>
-            <input
-              type="text"
-              id="full-name"
-              placeholder="Enter your full name"
-            />
+            <input type="text" id="full-name" placeholder="Enter your full name" />
           </div>
-
           <div class="info-field">
             <label for="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email address"
-            />
+            <input type="email" id="email" placeholder="Enter your email" />
           </div>
-
           <div class="info-field">
             <label for="phone">Phone Number</label>
             <div class="input-with-icon">
@@ -122,46 +112,25 @@
               <input type="text" id="phone" placeholder="+880 1XXXXXXXXX" />
             </div>
           </div>
-
           <div class="info-field">
             <label for="student-id">Student ID</label>
-            <input
-              type="text"
-              id="student-id"
-              placeholder="Enter your student ID"
-            />
+            <input type="text" id="student-id" placeholder="Enter your student ID" />
           </div>
-
           <div class="info-field">
             <label for="university">University</label>
-            <input
-              type="text"
-              id="university"
-              placeholder="Enter your university name"
-            />
+            <input type="text" id="university" placeholder="Enter your university" />
           </div>
-
           <div class="info-field">
             <label for="program">Program/Department</label>
-            <input
-              type="text"
-              id="program"
-              placeholder="Enter your department or program"
-            />
+            <input type="text" id="program" placeholder="Enter your department or program" />
           </div>
-
           <div class="info-field full-width">
             <label for="address">Permanent Address</label>
             <div class="input-with-icon">
               <i class="bx bx-map"></i>
-              <input
-                type="text"
-                id="address"
-                placeholder="Village, Post, District"
-              />
+              <input type="text" id="address" placeholder="Village, Post, District" />
             </div>
           </div>
-
           <div class="info-field">
             <label for="dob">Date of Birth</label>
             <div class="input-with-icon">
@@ -169,68 +138,95 @@
               <input type="date" id="dob" />
             </div>
           </div>
-
           <div class="info-field">
             <label for="gender">Gender</label>
             <input type="text" id="gender" placeholder="Enter your gender" />
           </div>
-
           <div class="info-field">
             <label for="emergency">Emergency Contact</label>
             <div class="input-with-icon">
               <i class="bx bx-phone-call"></i>
-              <input
-                type="text"
-                id="emergency"
-                placeholder="Emergency contact name & phone number"
-              />
+              <input type="text" id="emergency" placeholder="Name & phone number" />
             </div>
           </div>
         </div>
-
         <div class="action-buttons">
           <button class="cancel-btn"><i class="bx bx-x"></i> Cancel</button>
-          <button class="save-btn">
-            <i class="bx bx-save"></i> Save Changes
-          </button>
+          <button class="save-btn"><i class="bx bx-save"></i> Save Changes</button>
         </div>
       </section>
 
       <hr class="section-divider" />
 
-      <!-- Verification Section -->
+      <!-- Student Verification -->
       <section class="student-verification-section">
         <h2>Student Verification</h2>
-        <p class="section-description">
-          Verify your student status to access exclusive student rates and
-          trusted listings.
-        </p>
-
+        <p class="section-description">Verify your student status to access exclusive student rates.</p>
         <div class="verification-box">
           <i class="bx bx-info-circle info-icon"></i>
           <div class="verification-content">
             <h3>Verification Required</h3>
             <p>To complete student verification, please provide:</p>
             <ul>
-              <li>A valid <strong>University ID card</strong></li>
               <li>
-                <strong>Enrollment proof</strong> for the current semester
+                A valid <strong>University ID card</strong>
               </li>
-              <li><strong>University email verification</strong></li>
+              <li>
+                <strong>Enrollment proof</strong> for current semester
+              </li>
+              <li>
+                <strong>University email verification</strong>
+              </li>
             </ul>
           </div>
         </div>
-
-        <button class="verify-status-btn">
-          <i class="bx bx-lock"></i>
-          Verify Student Status
-        </button>
+        <button class="verify-status-btn"><i class="bx bx-lock"></i> Verify Student Status</button>
       </section>
-    </div>
+    </section>
 
-    <!-- ===== FOOTER ===== -->
-    <!-- <footer>
-      <p>© 2025 RoomifyUAP | All rights reserved</p>
-    </footer> -->
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Roomify UAP</h3>
+          <p>Empowering hostel and rental owners with smart tools.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="#">FAQ</a>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Email: support@roomifyuap.com</li>
+            <li>Phone: +8801796968195</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+    </footer>
+
+    <script>
+      const profileDropdown = document.querySelector('.profile-dropdown')
+      
+      profileDropdown.addEventListener('click', (e) => {
+        e.stopPropagation() // prevent auto-close
+        profileDropdown.classList.toggle('active')
+      })
+      
+      document.addEventListener('click', () => {
+        profileDropdown.classList.remove('active')
+      })
+    </script>
   </body>
 </html>

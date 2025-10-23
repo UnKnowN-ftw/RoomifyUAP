@@ -4,57 +4,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="{% static 'images/roomify_favicon.png' %}"
-    />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
     <title>Roomify UAP - Renter Dashboard</title>
-    <link
-      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="{% static 'css/renter_dashboard_styles.css' %}"
-    />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/renter_dashboard_styles.css' %}" />
   </head>
   <body>
     <!-- Navbar -->
     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
-        <div>
+        <div class="logo-text">
           <h2>Roomify UAP</h2>
           <p>Find Your Space</p>
         </div>
       </div>
+
       <nav class="nav-links">
-        <a href="#">Home</a>
+        <a href="{% url 'home' %}">Home</a>
         <a href="#">Favorites</a>
         <a href="#">My Bookings</a>
       </nav>
+
       <div class="profile-icon">
-        <a href="{% url 'renter_profile' %}">
+        <!-- Bell Icon for Notifications -->
+        <div class="notification-icon">
+          <a href="{% url 'notifications' %}" class="notification-icon">
+            <i class="bx bx-bell"></i>
+            {% if notification_count > 0 %}
+              <span class="notification-badge">{{ notification_count }}</span>
+            {% endif %}
+          </a>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown">
           <i class="bx bx-user"></i>
-        </a>
-        <a href="{% url 'notifications' %}" class="notification-icon">
-        <i class="bx bx-bell"></i>
-        {% if notification_count > 0 %}
-          <span class="notification-badge">{{ notification_count }}</span>
-        {% endif %}
-      </a>
-        <a href="{% url 'logout_user' %}">Logout</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{% url 'renter_profile' %}">Profile</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
       <h1>Find Your Perfect Student Accommodation</h1>
-      <p>
-        Browse through hundreds of verified hostel listings near UAP.
-        Affordable, safe, and comfortable living spaces for students.
-      </p>
+      <p>Browse through hundreds of verified hostel listings near UAP. Affordable, safe, and comfortable living spaces for students.</p>
       <div class="search-bar">
         <input type="text" placeholder="Search by location, area..." />
         <select>
@@ -87,35 +91,39 @@
       </div>
 
       <div class="card-grid">
-  {% for room in listings %}
-  <div class="listing-card">
-    <div class="card-image">
-      {% if room.image %}
-        <img src="{{ room.image.url }}" alt="{{ room.room_title }}">
-      {% else %}
-        <img src="{% static 'images/default-room.jpg' %}" alt="Default room">
-      {% endif %}
-      <div class="fav-btn"><i class="bx bx-heart"></i></div>
-    </div>
+        {% for room in listings %}
+          <div class="listing-card">
+            <div class="card-image">
+              {% if room.image %}
+                <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
+              {% else %}
+                <img src="{% static 'images/default-room.jpg' %}" alt="Default room" />
+              {% endif %}
+              <div class="fav-btn">
+                <i class="bx bx-heart"></i>
+              </div>
+            </div>
 
-    <div class="card-content">
-      <h3>{{ room.room_title }}</h3>
-      <p class="location">{{ room.location }}</p>
-      <div class="tags">
-        <span>{{ room.room_size }} sq ft</span>
-        <span>{{ room.occupancy }} person</span>
+            <div class="card-content">
+              <h3>{{ room.room_title }}</h3>
+              <p class="location">{{ room.location }}</p>
+              <div class="tags">
+                <span>{{ room.room_size }} sq ft</span>
+                <span>{{ room.occupancy }} person</span>
+              </div>
+              <div class="price-details">
+                <h4>৳{{ room.rent }}<span>/month</span></h4>
+              </div>
+              <a href="{% url 'view_details' room.id %}" class="details-btn">View Details</a>
+            </div>
+          </div>
+        {% empty %}
+          <p>No listings yet.</p>
+        {% endfor %}
       </div>
-      <div class="price-details">
-        <h4>৳{{ room.rent }}<span>/month</span></h4>
-      </div>
-      <a href="{% url 'view_details' room.id %}" class="details-btn">View Details</a>
-    </div>
-  </div>
-  {% empty %}
-    <p>No listings yet.</p>
-  {% endfor %}
-</div>
+    </section>
 
+    <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
@@ -126,11 +134,15 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">My Listings</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Messages</a></li>
-            <li><a href="#">FAQ</a></li>
+            <li>
+              <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="#">FAQ</a>
+            </li>
           </ul>
         </div>
 
@@ -142,8 +154,20 @@
           </ul>
         </div>
       </div>
-
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
+
+    <script>
+      const profileDropdown = document.querySelector('.profile-dropdown')
+      
+      profileDropdown.addEventListener('click', (e) => {
+        e.stopPropagation() // prevent auto-close
+        profileDropdown.classList.toggle('active')
+      })
+      
+      document.addEventListener('click', () => {
+        profileDropdown.classList.remove('active')
+      })
+    </script>
   </body>
 </html>
