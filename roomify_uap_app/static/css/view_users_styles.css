@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
+/* --- Global Styles --- */
 * {
     margin: 0;
     padding: 0;
@@ -60,7 +61,7 @@ nav a:hover {
     color: #f1c40f;
 }
 
-/* --- Main Dashboard --- */
+/* --- Main Content --- */
 main {
     flex: 1;
     padding: 2rem 3rem;
@@ -77,7 +78,7 @@ main {
     color: #555;
 }
 
-/* --- Table Sections --- */
+/* --- Table Section --- */
 .table-section {
     background: #fff;
     border-radius: 10px;
@@ -98,43 +99,50 @@ main {
     margin-bottom: 1rem;
 }
 
-.actions {
-    margin-bottom: 1rem;
-}
-
+/* --- Buttons --- */
 .btn {
-    padding: 6px 12px;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border-radius: 8px;
     text-decoration: none;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     margin-right: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    border: none;
+    display: inline-block;
+    text-align: center;
 }
 
-.btn.add-user {
-    background-color: #2563eb;
+/* Edit Button */
+.btn.edit,
+button.edit {
+    background: linear-gradient(135deg, #34d399, #10b981);
 }
 
-.btn.add-user:hover {
-    background-color: #1d4ed8;
+.btn.edit:hover,
+button.edit:hover {
+    background: linear-gradient(135deg, #10b981, #059669);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
-.btn.edit {
-    background-color: #27ae60;
+/* Delete Button */
+.btn.delete,
+button.delete {
+    background: linear-gradient(135deg, #f87171, #ef4444);
 }
 
-.btn.edit:hover {
-    background-color: #219150;
+.btn.delete:hover,
+button.delete:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
-.btn.delete {
-    background-color: #e74c3c;
-}
-
-.btn.delete:hover {
-    background-color: #c0392b;
-}
-
+/* --- Table Styles --- */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -199,5 +207,6 @@ footer {
     .btn {
         font-size: 0.8rem;
         padding: 4px 8px;
+        margin-bottom: 4px;
     }
 }

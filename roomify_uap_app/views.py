@@ -9,7 +9,8 @@ from .models import Profile, Listing, ListingView, Message
 from .models import Owner, Renter
 from datetime import datetime
 from .models import BookingRequest
-from django.db.models import Count, Sum
+from django.db.models import Count
+#from django.views.decorators.http import require_POST
 
 
 def home(request):
@@ -43,10 +44,10 @@ def renter_dashboard(request):
         messages.error(request, 'Access denied.')
         return redirect('home')
 
-    # ✅ Show all available listings
+    # Show all available listings
     listings = Listing.objects.all().order_by('-created_at')
 
-    # ✅ Notification count: only accepted/rejected responses for this renter
+    # Notification count: only accepted/rejected responses for this renter
     notifications = BookingRequest.objects.filter(
         renter=request.user
     ).exclude(status='pending').count()
@@ -113,8 +114,8 @@ def login_user(request, role):
 
 def register_user(request, role):
     """
-    - GET: render the registration form (role is 'renter' or 'owner')
-    - POST: validate, create user+profile, login and redirect
+    Role = 'owner' or 'renter'.
+    Creates User, Profile, and corresponding Owner/Renter automatically.
     """
     if request.method == 'POST':
         first_name = request.POST.get('first_name', '').strip()
@@ -125,7 +126,6 @@ def register_user(request, role):
         password = request.POST.get('password', '')
         confirm_password = request.POST.get('confirm_password', '')
 
-        # If username empty but email provided, derive username from email
         if not username and email:
             username = email.split('@')[0]
 
@@ -145,7 +145,7 @@ def register_user(request, role):
             messages.error(request, 'Email already registered.')
             return redirect('register_user', role=role)
 
-        # Create user and profile
+        # Create User
         user = User.objects.create_user(
             username=username,
             first_name=first_name,
@@ -153,16 +153,23 @@ def register_user(request, role):
             email=email,
             password=password
         )
+
+        # Create Profile
         Profile.objects.create(user=user, role=role, phone=phone)
+
+        # Create Owner or Renter
+        if role.lower() == 'owner':
+            Owner.objects.create(user=user)
+        elif role.lower() == 'renter':
+            Renter.objects.create(user=user)
 
         # Auto-login
         login(request, user)
-        if role == 'renter':
-            return redirect('renter_dashboard')
-        else:
+        if role.lower() == 'owner':
             return redirect('owner_dashboard')
+        else:
+            return redirect('renter_dashboard')
 
-    # GET -> render the registration form template
     return render(request, 'roomify_login_register.html', {'action': 'register', 'role': role})
 
 
@@ -286,7 +293,41 @@ def owner_messages(request):
 @login_required
 @role_required('owner')
 def post_new_listing(request):
-    return render(request, 'post_new_listing.html')
+    # Only owners can post
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile or profile.role != 'owner':
+        messages.error(request, "Access denied.")
+        return redirect('home')
+
+    if request.method == 'POST':
+        room_title = request.POST.get('room_title')
+        location = request.POST.get('location')
+        rent = request.POST.get('rent')
+        room_size = request.POST.get('room_size')
+        occupancy = request.POST.get('occupancy')
+        description = request.POST.get('description')
+        image = request.FILES.get('images')  # matches your form input name "images"
+
+        # Basic validation (you can extend)
+        if not room_title or not location or not rent:
+            messages.error(request, 'Please fill required fields.')
+            return redirect('post_new_listing.html')
+
+        Listing.objects.create(
+            owner=request.user,
+            room_title=room_title,
+            location=location,
+            rent=rent,
+            room_size=room_size or 0,
+            occupancy=occupancy or 0,
+            description=description or '',
+            image=image
+        )
+
+        messages.success(request, 'Listing posted successfully.')
+        return redirect('renter_dashboard')
+
+    return render(request, 'post_new_listing')
 
 
 def admin_login(request):
@@ -312,7 +353,9 @@ def admin_login(request):
 def admin_dashboard(request):
     owners = Owner.objects.all()
     renters = Renter.objects.all()
-    admin_user = request.user  # logged-in admin
+    admin_user = request.user
+    print("Owners in DB:", owners)
+    print("Renters in DB:", renters)
     return render(request, 'admin_dashboard.html', {
         'owners': owners,
         'renters': renters,
@@ -419,44 +462,6 @@ def reject_user(request, user_id, user_type):
         user.is_verified = False
         user.save()
     return redirect('admin_dashboard')
-
-@login_required
-def post_new_listing(request):
-    # Only owners can post
-    profile = Profile.objects.filter(user=request.user).first()
-    if not profile or profile.role != 'owner':
-        messages.error(request, "Access denied.")
-        return redirect('home')
-
-    if request.method == 'POST':
-        room_title = request.POST.get('room_title')
-        location = request.POST.get('location')
-        rent = request.POST.get('rent')
-        room_size = request.POST.get('room_size')
-        occupancy = request.POST.get('occupancy')
-        description = request.POST.get('description')
-        image = request.FILES.get('images')  # matches your form input name "images"
-
-        # Basic validation (you can extend)
-        if not room_title or not location or not rent:
-            messages.error(request, 'Please fill required fields.')
-            return redirect('post_new_listing')
-
-        Listing.objects.create(
-            owner=request.user,
-            room_title=room_title,
-            location=location,
-            rent=rent,
-            room_size=room_size or 0,
-            occupancy=occupancy or 0,
-            description=description or '',
-            image=image
-        )
-
-        messages.success(request, 'Listing posted successfully.')
-        return redirect('renter_dashboard')
-
-    return render(request, 'post_new_listing.html')
 
 
 @login_required
