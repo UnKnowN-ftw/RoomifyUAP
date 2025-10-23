@@ -10,7 +10,6 @@ from .models import Owner, Renter
 from datetime import datetime
 from .models import BookingRequest
 from django.db.models import Count
-#from django.views.decorators.http import require_POST
 
 
 def home(request):
@@ -325,9 +324,9 @@ def post_new_listing(request):
         )
 
         messages.success(request, 'Listing posted successfully.')
-        return redirect('renter_dashboard')
+        return redirect('renter_dashboard.html')
 
-    return render(request, 'post_new_listing')
+    return render(request, 'post_new_listing.html')
 
 
 def admin_login(request):
