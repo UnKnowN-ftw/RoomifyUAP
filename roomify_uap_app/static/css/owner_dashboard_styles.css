@@ -64,7 +64,8 @@ body {
   transition: color 0.2s ease;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: #f4a9ff;
 }
 
@@ -84,14 +85,24 @@ body {
 }
 
 .notification-icon i {
-  font-size: 28px;
-  color: white;      /* Ensures the bell is white */
+  font-size: 24px;
+  color: white;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .notification-icon i:hover {
-  color: #f4a9ff;    /* Optional hover color */
+  color: #f4a9ff;
+}
+
+.bx-bell {
+  color: white;
+  font-size: 26px;
+  transition: transform 0.2s ease;
+}
+
+.bx-bell:hover {
+  transform: scale(1.1);
 }
 
 .notification-badge {
@@ -101,7 +112,7 @@ body {
   background: red;
   color: white;
   padding: 2px 6px;
-  font-size: 11px;
+  font-size: 12px;
   border-radius: 50%;
   font-weight: bold;
 }
@@ -123,7 +134,7 @@ body {
 
 /* Show dropdown with slide-down and fade */
 .notif-dropdown.show {
-  max-height: 350px; /* adjust to fit your content */
+  max-height: 350px;
   opacity: 1;
   padding: 10px 0;
 }
@@ -183,6 +194,12 @@ body {
 .profile-dropdown i {
   font-size: 28px;
   color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.profile-dropdown i:hover {
+  color: #f4a9ff;
+  transform: scale(1.1);
 }
 
 .profile-dropdown .dropdown-menu {
@@ -210,6 +227,13 @@ body {
   font-size: 14px;
   display: block;
   padding: 10px 20px;
+}
+
+.profile-dropdown .dropdown-menu li a.active {
+  background-color: #f4a9ff;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
 }
 
 .profile-dropdown .dropdown-menu li a:hover {

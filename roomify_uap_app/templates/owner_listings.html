@@ -1,113 +1,157 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
-    <title>My Listings - Roomify UAP</title>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'css/owner_pages_styles.css' %}" />
-  </head>
-  <body>
-    <!-- Navbar -->
-    <header class="navbar">
-      <div class="logo">
-        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
-        <div>
-          <h2>Roomify UAP</h2>
-          <p>Owner Dashboard</p>
-        </div>
-      </div>
-      <nav class="nav-links">
-        <a href="{% url 'owner_dashboard' %}">Home</a>
-        <a class="active" href="#">My Listings</a>
-        <a href="{% url 'owner_analytics' %}">Analytics</a>
-        <a href="{% url 'owner_messages' %}">Messages</a>
-      </nav>
-      <div class="profile-icon">
-        <i class="bx bx-user"></i>
-        <a href="{% url 'logout_user' %}">Logout</a>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+  <title>My Listings - Roomify UAP</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/owner_pages_styles.css' %}" />
+</head>
+<body>
 
-    <section class="page-header">
-      <h1>My Listings</h1>
-      <p>Manage your properties, check availability, and edit details.</p>
-    </section>
+<!-- ===== Navbar ===== -->
+<header class="navbar">
+  <div class="logo">
+    <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+    <div class="logo-text">
+      <h2>Roomify UAP</h2>
+      <p>Owner Dashboard</p>
+    </div>
+  </div>
 
-    <section class="listing-section">
+  <nav class="nav-links">
+    <a href="{% url 'owner_dashboard' %}">Home</a>
+    <a class="active" href="{% url 'owner_listings' %}">My Listings</a>
+    <a href="{% url 'owner_analytics' %}">Analytics</a>
+  </nav>
+
+  <div class="profile-section">
+    <!-- Notifications -->
+    <div class="notification-icon" id="notifBellWrapper">
+      <i class="bx bx-bell" id="notifBell"></i>
+      {% if notification_count > 0 %}
+        <span class="notification-badge">{{ notification_count }}</span>
+      {% endif %}
+      <div class="notif-dropdown" id="notifDropdown">
+        {% for req in notifications %}
+          <div class="notif-item">
+            <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
+            <div class="notif-actions">
+              <form method="POST" action="{% url 'booking_accept' req.id %}">
+                {% csrf_token %}
+                <button type="submit" class="accept-btn">Accept</button>
+              </form>
+              <form method="POST" action="{% url 'booking_reject' req.id %}">
+                {% csrf_token %}
+                <button type="submit" class="reject-btn">Reject</button>
+              </form>
+            </div>
+          </div>
+        {% empty %}
+          <p class="no-notifs">No new requests</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown">
+      <i class="bx bx-user"></i>
+      <ul class="dropdown-menu">
+        <li><a href="{% url 'owner_profile' %}">Profile</a></li>
+        <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+        <li><a href="{% url 'logout_user' %}" class="logout-link">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Page Header ===== -->
+<section class="page-header">
+  <h1>My Listings</h1>
+  <p>Manage your properties, check availability, and edit details.</p>
+  <div style="margin-top: 20px;">
+    <a href="{% url 'post_new_listing' %}" class="add-listing-btn">Add New Listing</a>
+  </div>
+</section>
+
+<!-- ===== Listings Section ===== -->
+<section class="listing-section">
+  {% if listings %}
+    {% for listing in listings %}
       <div class="listing-card">
-        <img src="{% static 'images/modern-single-room.jpg' %}" alt="Modern Single Room" />
+        {% if listing.image %}
+          <img src="{{ listing.image.url }}" alt="{{ listing.room_title|default:"No Image" }}" />
+        {% else %}
+          <img src="{% static 'images/placeholder.jpg' %}" alt="No Image" />
+        {% endif %}
         <div class="listing-info">
-          <h3>Modern Single Room</h3>
-          <p>Uttara, Dhaka</p>
-          <p>৳8,000/month | 120 sq ft</p>
-          <span class="status available">Available</span>
+          <h3>{{ listing.room_title|default:"Untitled Room" }}</h3>
+          <p>{{ listing.location|default:"Unknown Location" }}</p>
+          <p>৳{{ listing.rent|default:"0" }}/month | {{ listing.room_size|default:"N/A" }} sq ft</p>
+          <span class="status {% if listing.is_rented %}rented{% else %}available{% endif %}">
+            {% if listing.is_rented %}Rented{% else %}Available{% endif %}
+          </span>
         </div>
         <div class="actions">
-          <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-          <button class="view"><i class="bx bx-show"></i> View</button>
+          <a href="{% url 'edit_listing' listing.id %}" class="edit"><i class="bx bx-edit"></i> Edit</a>
+          <a href="{% url 'view_listing' listing.id %}" class="view"><i class="bx bx-show"></i> View</a>
         </div>
       </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center; margin-top:50px;">
+      <b>No listings yet.</b>
+    </div>
+  {% endif %}
+</section>
 
-      <div class="listing-card">
-        <img src="{% static 'images/cozy-shared-room.jpg' %}" alt="Cozy Shared Room" />
-        <div class="listing-info">
-          <h3>Cozy Shared Room</h3>
-          <p>Banani, Dhaka</p>
-          <p>৳5,000/month | 180 sq ft</p>
-          <span class="status rented">Rented</span>
-        </div>
-        <div class="actions">
-          <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-          <button class="view"><i class="bx bx-show"></i> View</button>
-        </div>
-      </div>
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Roomify UAP</h3>
+      <p>Empowering hostel and rental owners with smart tools.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+        <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+        <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+        <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact Us</h4>
+      <ul>
+        <li>Email: support@roomifyuap.com</li>
+        <li>Phone: +8801796968195</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+</footer>
 
-      <div class="listing-card">
-        <img src="{% static 'images/premium-room.jpg' %}" alt="Premium Double Room" />
-        <div class="listing-info">
-          <h3>Premium Double Room</h3>
-          <p>Gulshan, Dhaka</p>
-          <p>৳12,000/month | 200 sq ft</p>
-          <span class="status available">Available</span>
-        </div>
-        <div class="actions">
-          <button class="edit"><i class="bx bx-edit"></i> Edit</button>
-          <button class="view"><i class="bx bx-show"></i> View</button>
-        </div>
-      </div>
-    </section>
+<script>
+  // Notification dropdown
+  const notifBell = document.getElementById('notifBell');
+  const notifDropdown = document.getElementById('notifDropdown');
+  notifBell.addEventListener('click', e => {
+    e.stopPropagation();
+    notifDropdown.classList.toggle('show');
+  });
+  document.addEventListener('click', () => notifDropdown.classList.remove('show'));
 
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>Roomify UAP</h3>
-          <p>Empowering hostel and rental owners with smart tools.</p>
-        </div>
-
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
-            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
-            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
-            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
-            <li><a href="#">FAQ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-section">
-          <h4>Contact Us</h4>
-          <ul>
-            <li>Email: support@roomifyuap.com</li>
-            <li>Phone: +8801796968195</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
-    </footer>
-  </body>
+  // Profile dropdown
+  const profileDropdown = document.querySelector('.profile-dropdown');
+  profileDropdown.addEventListener('click', e => {
+    e.stopPropagation();
+    profileDropdown.classList.toggle('active');
+  });
+  document.addEventListener('click', () => profileDropdown.classList.remove('active'));
+</script>
+</body>
 </html>

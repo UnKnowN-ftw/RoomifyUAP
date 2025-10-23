@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
+    <title>View Listing - Roomify UAP</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/view_listing_styles.css' %}" />
+  </head>
+  <body>
+    <!-- Navbar same as dashboard -->
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div class="logo-text">
+          <h2>Roomify UAP</h2>
+          <p>View Listing</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="{% url 'owner_dashboard' %}">Home</a>
+        <a href="{% url 'owner_listings' %}">My Listings</a>
+        <a href="{% url 'owner_analytics' %}">Analytics</a>
+      </nav>
+    </header>
+
+    <section class="view-listing-section">
+      <div class="container">
+        <h2>{{ listing.room_title }}</h2>
+        <div class="listing-card-view">
+          {% if listing.image %}
+            <img src="{{ listing.image.url }}" alt="{{ listing.room_title }}" />
+          {% else %}
+            <img src="{% static 'images/default-room.jpg' %}" alt="Room" />
+          {% endif %}
+
+          <div class="listing-info">
+            <p>
+              <strong>Location:</strong> {{ listing.location }}
+            </p>
+            <p>
+              <strong>Rent:</strong> ৳{{ listing.rent }}
+            </p>
+            <p>
+              <strong>Room Size:</strong> {{ listing.room_size }} sq ft
+            </p>
+            <p>
+              <strong>Occupancy:</strong> {{ listing.occupancy }} person(s)
+            </p>
+            <p>
+              <strong>Description:</strong> {{ listing.description }}
+            </p>
+          </div>
+
+          <div class="listing-actions">
+            <a href="{% url 'edit_listing' listing.id %}" class="edit-btn">Edit</a>
+            <a href="{% url 'owner_listings' %}" class="back-btn">Back</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

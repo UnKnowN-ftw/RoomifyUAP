@@ -305,12 +305,12 @@ def post_new_listing(request):
         room_size = request.POST.get('room_size')
         occupancy = request.POST.get('occupancy')
         description = request.POST.get('description')
-        image = request.FILES.get('images')  # matches your form input name "images"
+        image = request.FILES.get('images')
+        
 
-        # Basic validation (you can extend)
         if not room_title or not location or not rent:
             messages.error(request, 'Please fill required fields.')
-            return redirect('post_new_listing.html')
+            return redirect('post_new_listing')
 
         Listing.objects.create(
             owner=request.user,
@@ -324,9 +324,63 @@ def post_new_listing(request):
         )
 
         messages.success(request, 'Listing posted successfully.')
-        return redirect('renter_dashboard.html')
+        return redirect('renter_dashboard')
 
     return render(request, 'post_new_listing.html')
+
+
+@login_required
+@role_required('owner')
+def owner_listings(request):
+    listings = Listing.objects.filter(owner=request.user).order_by('-created_at')
+    return render(request, 'owner_listings.html', {'listings': listings})
+
+
+@login_required
+@role_required('owner')
+def edit_listing(request, listing_id):
+    """Allows owner to view and edit their own listing."""
+    listing = get_object_or_404(Listing, id=listing_id, owner=request.user)
+
+    if request.method == 'POST':
+        listing.room_title = request.POST.get('room_title', listing.room_title)
+        listing.location = request.POST.get('location', listing.location)
+        listing.rent = request.POST.get('rent', listing.rent)
+        listing.room_size = request.POST.get('room_size', listing.room_size)
+        listing.occupancy = request.POST.get('occupancy', listing.occupancy)
+        listing.description = request.POST.get('description', listing.description)
+        image = request.FILES.get('image')
+        if image:
+            listing.image = image
+
+        listing.save()
+        messages.success(request, 'Listing updated successfully.')
+        return redirect('owner_listings')
+
+    return render(request, 'edit_listing.html', {'listing': listing})
+
+
+@login_required
+@role_required('owner')
+def view_listing(request, listing_id):
+    """Allow owner to view the details of one of their listings."""
+    listing = get_object_or_404(Listing, id=listing_id, owner=request.user)
+
+    return render(request, 'view_listing.html', {'listing': listing})
+
+
+@login_required
+@role_required('owner')
+def delete_listing(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id, owner=request.user)
+    
+    if request.method == "POST":
+        listing.delete()
+        messages.success(request, "Listing deleted successfully.")
+        return redirect('owner_listings')
+
+    messages.error(request, "Invalid request method.")
+    return redirect('owner_listings')
 
 
 def admin_login(request):
@@ -465,7 +519,6 @@ def reject_user(request, user_id, user_type):
 
 @login_required
 def renter_dashboard(request):
-    # Only renters allowed here per your flow — if you want everyone to see, remove role check
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'renter':
         messages.error(request, 'Access denied.')

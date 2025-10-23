@@ -16,27 +16,57 @@
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
         <div class="logo-text">
           <h2>Roomify UAP</h2>
-          <p>Find Your Space</p>
+          <p>Owner Dashboard</p>
         </div>
       </div>
       <nav class="nav-links">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="#">Favorites</a>
-        <a href="#">My Bookings</a>
+        <a href="{% url 'owner_dashboard' %}" class="{% if current_page == 'dashboard' %}active{% endif %}">Home</a>
+        <a href="{% url 'owner_listings' %}" class="{% if current_page == 'listings' %}active{% endif %}">My Listings</a>
+        <a href="{% url 'owner_analytics' %}" class="{% if current_page == 'analytics' %}active{% endif %}">Analytics</a>
       </nav>
-      <div class="profile-icon">
+
+      <!-- Profile + Notifications Section -->
+      <div class="profile-section">
+        <!-- Notification Bell -->
+        <div class="notification-icon">
+          <i class="bx bx-bell" id="notifBell"></i>
+          {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+              <div class="notif-item">
+                <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
+                <div class="notif-actions">
+                  <form method="POST" action="{% url 'booking_accept' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="accept-btn">Accept</button>
+                  </form>
+                  <form method="POST" action="{% url 'booking_reject' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="reject-btn">Reject</button>
+                  </form>
+                </div>
+              </div>
+            {% empty %}
+              <p class="no-notifs">No new requests</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Profile Dropdown -->
         <div class="profile-dropdown">
           <i class="bx bx-user"></i>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'owner_profile' %}">Profile</a></li>
-            <li><a href="{% url 'notifications' %}">Notifications</a></li>
+            <li><a class="active" href="{% url 'owner_profile' %}">Profile</a></li>
+            <li><a href="{% url 'owner_messages' %}" class="{% if current_page == 'messages' %}active{% endif %}">Messages</a></li>
             <li><a href="{% url 'logout_user' %}" class="logout-link">Logout</a></li>
           </ul>
         </div>
       </div>
     </header>
 
-    <!-- ===== MAIN PROFILE CONTENT ===== -->
+    <!-- ===== PROFILE CONTENT ===== -->
     <section class="profile-container">
       <!-- Profile Header -->
       <div class="profile-header">
@@ -53,21 +83,21 @@
 
         <div class="stats-and-edit">
           <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-number">0</span>
-              <span class="stat-label">Properties</span>
+            <div class="stat-card">
+              <h3>Properties</h3>
+              <h2>0</h2>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">0</span>
-              <span class="stat-label">Total Rooms</span>
+            <div class="stat-card">
+              <h3>Total Rooms</h3>
+              <h2>0</h2>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">0%</span>
-              <span class="stat-label">Occupancy</span>
+            <div class="stat-card">
+              <h3>Occupancy</h3>
+              <h2>0%</h2>
             </div>
-            <div class="stat-item">
-              <span class="stat-number">0.0</span>
-              <span class="stat-label">Rating</span>
+            <div class="stat-card">
+              <h3>Rating</h3>
+              <h2>0.0</h2>
             </div>
           </div>
           <button class="edit-photo-btn"><i class="bx bx-camera"></i> Edit Profile Photo</button>
@@ -124,6 +154,7 @@
             </div>
           </div>
         </div>
+
         <div class="action-buttons">
           <button class="cancel-btn"><i class="bx bx-x"></i> Cancel</button>
           <button class="save-btn"><i class="bx bx-save"></i> Save Changes</button>
@@ -133,7 +164,7 @@
       <hr class="section-divider" />
 
       <!-- Owner Verification Section -->
-      <section class="student-verification-section">
+      <section class="verification-section">
         <h2>Owner Verification</h2>
         <p class="section-description">Verify your owner status to add your property details</p>
         <div class="verification-box">
@@ -162,10 +193,10 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="#">My Listings</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Messages</a></li>
+            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
+            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
+            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
+            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
             <li><a href="#">FAQ</a></li>
           </ul>
         </div>
@@ -180,16 +211,24 @@
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
     <script>
+      // Profile dropdown toggle
       const profileDropdown = document.querySelector('.profile-dropdown');
-      profileDropdown.addEventListener('click', () => {
+      profileDropdown.addEventListener('click', e => {
+        e.stopPropagation();
         profileDropdown.classList.toggle('active');
       });
-      document.addEventListener('click', (e) => {
-        if (!profileDropdown.contains(e.target)) {
-          profileDropdown.classList.remove('active');
-        }
+      document.addEventListener('click', () => profileDropdown.classList.remove('active'));
+
+      // Notification dropdown toggle
+      const notifBell = document.getElementById('notifBell');
+      const notifDropdown = document.getElementById('notifDropdown');
+      notifBell.addEventListener('click', e => {
+        e.stopPropagation();
+        notifDropdown.classList.toggle('show');
       });
+      document.addEventListener('click', () => notifDropdown.classList.remove('show'));
     </script>
   </body>
 </html>

@@ -25,6 +25,9 @@ urlpatterns = [
     path('send-message/<int:listing_id>/', views.send_message, name='send_message'),
     path('dashboard/owner/profile/', views.owner_profile, name='owner_profile'),
     path('post-new-listing/', views.post_new_listing, name='post_new_listing'),
+    path('owner/listing/edit/<int:listing_id>/', views.edit_listing, name='edit_listing'),
+    path('owner/listing/view/<int:listing_id>/', views.view_listing, name='view_listing'),
+    path('listing/<int:listing_id>/delete/', views.delete_listing, name='delete_listing'),
 
     path('dashboard/admin/login/', views.admin_login, name='admin_login'),
     path('dashboard/admin/', views.admin_dashboard, name='admin_dashboard'),

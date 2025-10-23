@@ -22,11 +22,50 @@
         <a href="{% url 'owner_dashboard' %}">Home</a>
         <a href="{% url 'owner_listings' %}">My Listings</a>
         <a href="{% url 'owner_analytics' %}">Analytics</a>
-        <a class="active" href="#">Messages</a>
       </nav>
-      <div class="profile-icon">
-        <i class="bx bx-user"></i>
-        <a href="{% url 'logout_user' %}">Logout</a>
+      <div class="profile-section">
+        <!-- Notifications -->
+        <div class="notification-icon" id="notifBellWrapper">
+          <i class="bx bx-bell" id="notifBell"></i>
+          {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+              <div class="notif-item">
+                <p>{{ req.renter.username }} wants to book "{{ req.listing.room_title }}".</p>
+                <div class="notif-actions">
+                  <form method="POST" action="{% url 'booking_accept' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="accept-btn">Accept</button>
+                  </form>
+                  <form method="POST" action="{% url 'booking_reject' req.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="reject-btn">Reject</button>
+                  </form>
+                </div>
+              </div>
+            {% empty %}
+              <p class="no-notifs">No new requests</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown">
+          <i class="bx bx-user"></i>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{% url 'owner_profile' %}">Profile</a>
+            </li>
+            <li>
+              <a class="active" href="{% url 'owner_messages' %}">Messages</a>
+            </li>
+            <li>
+              <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
 
@@ -38,21 +77,27 @@
     <section class="messages-container">
       <div class="message-card">
         <h3>Ahmed Khan</h3>
-        <p><strong>Room:</strong> Modern Single Room</p>
+        <p>
+          <strong>Room:</strong> Modern Single Room
+        </p>
         <p>"Hello, is this room still available?"</p>
         <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
       </div>
 
       <div class="message-card">
         <h3>Sarah Rahman</h3>
-        <p><strong>Room:</strong> Cozy Shared Room</p>
+        <p>
+          <strong>Room:</strong> Cozy Shared Room
+        </p>
         <p>"Can I schedule a visit for tomorrow evening?"</p>
         <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
       </div>
 
       <div class="message-card">
         <h3>Jubair Hossain</h3>
-        <p><strong>Room:</strong> Premium Double Room</p>
+        <p>
+          <strong>Room:</strong> Premium Double Room
+        </p>
         <p>"Do you allow pets in the apartment?"</p>
         <button class="reply-btn"><i class="bx bx-reply"></i> Reply</button>
       </div>
@@ -68,11 +113,21 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
-            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
-            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
-            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
-            <li><a href="#">FAQ</a></li>
+            <li>
+              <a href="{% url 'owner_dashboard' %}">Home</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_listings' %}">My Listings</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_analytics' %}">Analytics</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_messages' %}">Messages</a>
+            </li>
+            <li>
+              <a href="#">FAQ</a>
+            </li>
           </ul>
         </div>
 
@@ -87,5 +142,23 @@
 
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
+    <script>
+      // Notification dropdown
+      const notifBell = document.getElementById('notifBell')
+      const notifDropdown = document.getElementById('notifDropdown')
+      notifBell.addEventListener('click', (e) => {
+        e.stopPropagation()
+        notifDropdown.classList.toggle('show')
+      })
+      document.addEventListener('click', () => notifDropdown.classList.remove('show'))
+      
+      // Profile dropdown
+      const profileDropdown = document.querySelector('.profile-dropdown')
+      profileDropdown.addEventListener('click', (e) => {
+        e.stopPropagation()
+        profileDropdown.classList.toggle('active')
+      })
+      document.addEventListener('click', () => profileDropdown.classList.remove('active'))
+    </script>
   </body>
 </html>

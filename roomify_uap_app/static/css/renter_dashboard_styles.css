@@ -66,10 +66,10 @@ body {
   transition: color 0.2s ease;
 }
 
-.nav-links a:hover {
-  color: #0077ff;
+.nav-links a:hover,
+.nav-links a.active {
+  color: #f4a9ff;
 }
-
 .profile-icon {
   position: absolute;
   right: 5%; /* keeps profile icons right */

@@ -21,7 +21,7 @@
       </div>
 
       <nav class="nav-links">
-        <a href="{% url 'owner_dashboard' %}">Home</a>
+        <a class="active" href="{% url 'owner_dashboard' %}">Home</a>
         <a href="{% url 'owner_listings' %}">My Listings</a>
         <a href="{% url 'owner_analytics' %}">Analytics</a>
       </nav>
@@ -58,9 +58,15 @@
         <div class="profile-dropdown">
           <i class="bx bx-user"></i>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'owner_profile' %}">Profile</a></li>
-            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
-            <li><a href="{% url 'logout_user' %}" class="logout-link">Logout</a></li>
+            <li>
+              <a href="{% url 'owner_profile' %}">Profile</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_messages' %}">Messages</a>
+            </li>
+            <li>
+              <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -126,14 +132,18 @@
                   <h4>৳{{ room.rent }}<span>/month</span></h4>
                 </div>
                 <div class="actions">
-                  <button class="edit">Edit</button>
-                  <button class="view">View</button>
+                  <form action="{% url 'edit_listing' room.id %}" method="get" style="display:inline;">
+                    <button type="submit" class="edit">Edit</button>
+                  </form>
+                  <form action="{% url 'view_listing' room.id %}" method="get" style="display:inline;">
+                    <button type="submit" class="view">View</button>
+                  </form>
                 </div>
               </div>
             </div>
           {% endfor %}
         {% else %}
-          <p>No listings available.</p>
+          <b>No listings available.</b>
         {% endif %}
       </div>
     </section>
@@ -148,10 +158,21 @@
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="{% url 'owner_dashboard' %}">Home</a></li>
-            <li><a href="{% url 'owner_listings' %}">My Listings</a></li>
-            <li><a href="{% url 'owner_analytics' %}">Analytics</a></li>
-            <li><a href="{% url 'owner_messages' %}">Messages</a></li>
+            <li>
+              <a href="{% url 'owner_dashboard' %}">Home</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_listings' %}">My Listings</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_analytics' %}">Analytics</a>
+            </li>
+            <li>
+              <a href="{% url 'owner_messages' %}">Messages</a>
+            </li>
+            <li>
+              <a href="#">FAQ</a>
+            </li>
           </ul>
         </div>
         <div class="footer-section">
@@ -167,21 +188,21 @@
 
     <script>
       // Notification dropdown
-      const notifBell = document.getElementById('notifBell');
-      const notifDropdown = document.getElementById('notifDropdown');
+      const notifBell = document.getElementById('notifBell')
+      const notifDropdown = document.getElementById('notifDropdown')
       notifBell.addEventListener('click', (e) => {
-        e.stopPropagation();
-        notifDropdown.classList.toggle('show');
-      });
-      document.addEventListener('click', () => notifDropdown.classList.remove('show'));
-
+        e.stopPropagation()
+        notifDropdown.classList.toggle('show')
+      })
+      document.addEventListener('click', () => notifDropdown.classList.remove('show'))
+      
       // Profile dropdown
-      const profileDropdown = document.querySelector('.profile-dropdown');
+      const profileDropdown = document.querySelector('.profile-dropdown')
       profileDropdown.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('active');
-      });
-      document.addEventListener('click', () => profileDropdown.classList.remove('active'));
+        e.stopPropagation()
+        profileDropdown.classList.toggle('active')
+      })
+      document.addEventListener('click', () => profileDropdown.classList.remove('active'))
     </script>
   </body>
 </html>
