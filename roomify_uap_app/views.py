@@ -10,11 +10,11 @@ from .models import Owner, Renter
 from datetime import datetime
 from .models import BookingRequest
 from django.db.models import Count
+from django.views.decorators.http import require_POST
 
 
 def home(request):
     if request.user.is_authenticated:
-        # Redirect logged-in users directly to their dashboard
         profile = Profile.objects.filter(user=request.user).first()
         if profile and profile.role == 'renter':
             return redirect('renter_dashboard')
@@ -23,7 +23,6 @@ def home(request):
     return render(request, 'homepage.html')
 
 
-# Decorator for role-based access
 def role_required(role):
     def decorator(view_func):
         def _wrapped(request, *args, **kwargs):
@@ -43,17 +42,16 @@ def renter_dashboard(request):
         messages.error(request, 'Access denied.')
         return redirect('home')
 
-    # Show all available listings
     listings = Listing.objects.all().order_by('-created_at')
 
-    # Notification count: only accepted/rejected responses for this renter
     notifications = BookingRequest.objects.filter(
         renter=request.user
-    ).exclude(status='pending').count()
+    ).exclude(status='pending')
 
     return render(request, 'renter_dashboard.html', {
         'listings': listings,
-        'notification_count': notifications
+        'notifications': notifications,
+        'notification_count': notifications.count()
     })
 
 
@@ -71,11 +69,14 @@ def owner_dashboard(request):
         status='pending'
     )
 
-    return render(request, 'owner_dashboard.html', {
+    context = {
+        'profile': profile,
         'listings': owner_listings,
+        'notifications': notifications,
         'notification_count': notifications.count(),
-        'notifications': notifications
-    })
+    }
+
+    return render(request, 'owner_dashboard.html', context)
 
 
 def login_user(request, role):
@@ -107,7 +108,6 @@ def login_user(request, role):
             messages.error(request, 'Invalid username or password.')
             return redirect('login_user', role=role)
 
-    # GET -> render the login form template
     return render(request, 'roomify_login_register.html', {'action': 'login', 'role': role})
 
 
@@ -144,7 +144,6 @@ def register_user(request, role):
             messages.error(request, 'Email already registered.')
             return redirect('register_user', role=role)
 
-        # Create User
         user = User.objects.create_user(
             username=username,
             first_name=first_name,
@@ -153,16 +152,13 @@ def register_user(request, role):
             password=password
         )
 
-        # Create Profile
         Profile.objects.create(user=user, role=role, phone=phone)
-
-        # Create Owner or Renter
+        
         if role.lower() == 'owner':
             Owner.objects.create(user=user)
         elif role.lower() == 'renter':
             Renter.objects.create(user=user)
 
-        # Auto-login
         login(request, user)
         if role.lower() == 'owner':
             return redirect('owner_dashboard')
@@ -184,7 +180,7 @@ def logout_user(request):
 def send_message(request, listing_id):
     """Allow a renter to send a message to a listing owner."""
     listing = get_object_or_404(Listing, id=listing_id)
-    receiver = listing.owner  # assuming your Listing model has a field `owner = ForeignKey(User, ...)`
+    receiver = listing.owner
 
     if request.method == "POST":
         content = request.POST.get("content", "").strip()
@@ -192,7 +188,6 @@ def send_message(request, listing_id):
             messages.error(request, "Message cannot be empty.")
             return redirect("listing_detail", listing_id=listing_id)
 
-        # Create the message
         Message.objects.create(
             sender=request.user,
             receiver=receiver,
@@ -206,7 +201,7 @@ def send_message(request, listing_id):
     return redirect("listing_detail", listing_id=listing_id)
 
 
-# Owner specific views
+
 @login_required
 @role_required('owner')
 def owner_listings(request):
@@ -229,7 +224,7 @@ def owner_analytics(request):
     total_views = ListingView.objects.filter(listing__in=listings).count()
     total_revenue = BookingRequest.objects.filter(
         listing__in=listings, status='accepted'
-    ).count() * 1000  # Example: assuming each accepted booking = 1000৳, adjust as needed
+    ).count() * 1000
 
     total_rooms = listings.count()
     occupied_rooms = listings.filter(occupied=True).count()
@@ -265,15 +260,6 @@ def owner_analytics(request):
     return render(request, 'owner_analytics.html', context)
 
 
-def view_details(request, room_id):
-    room = get_object_or_404(Listing, id=room_id)
-
-    # Track view
-    ListingView.objects.create(listing=room, viewer=request.user if request.user.is_authenticated else None)
-
-    return render(request, 'view_details.html', {'room': room})
-
-
 
 @login_required
 @role_required('owner')
@@ -292,7 +278,6 @@ def owner_messages(request):
 @login_required
 @role_required('owner')
 def post_new_listing(request):
-    # Only owners can post
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'owner':
         messages.error(request, "Access denied.")
@@ -328,12 +313,6 @@ def post_new_listing(request):
 
     return render(request, 'post_new_listing.html')
 
-
-@login_required
-@role_required('owner')
-def owner_listings(request):
-    listings = Listing.objects.filter(owner=request.user).order_by('-created_at')
-    return render(request, 'owner_listings.html', {'listings': listings})
 
 
 @login_required
@@ -466,11 +445,11 @@ def edit_user(request, user_id):
         if password:
             user.set_password(password)
             if user == request.user:
-                update_session_auth_hash(request, user)  # keeps admin logged in
+                update_session_auth_hash(request, user)
 
         user.save()
         messages.success(request, 'User updated successfully.')
-        return redirect('admin_dashboard')  # Redirect to dashboard instead of view_users
+        return redirect('admin_dashboard')
 
     return render(request, 'edit_user.html', {'user': user})
 
@@ -517,16 +496,6 @@ def reject_user(request, user_id, user_type):
     return redirect('admin_dashboard')
 
 
-@login_required
-def renter_dashboard(request):
-    profile = Profile.objects.filter(user=request.user).first()
-    if not profile or profile.role != 'renter':
-        messages.error(request, 'Access denied.')
-        return redirect('home')
-
-    listings = Listing.objects.all().order_by('-created_at')  # newest first
-    return render(request, 'renter_dashboard.html', {'listings': listings})
-
 
 @login_required
 def view_details(request, room_id):
@@ -543,22 +512,43 @@ def view_details(request, room_id):
 
     return render(request, 'view_details.html', {'room': room})
 
+
 def renter_profile(request):
     return render(request, 'renter_profile.html')
 
 def owner_profile(request):
     return render(request, 'owner_profile.html')
 
+
 @login_required
 def notifications(request):
     profile = Profile.objects.filter(user=request.user).first()
 
     if profile.role == 'owner':
-        notifications = BookingRequest.objects.filter(owner=request.user, status='pending')
+        owner_profile = Owner.objects.get(user=request.user)
+        notifications = BookingRequest.objects.filter(
+            owner=owner_profile,
+            status='pending'
+        )
     else:
-        notifications = BookingRequest.objects.filter(renter=request.user).exclude(status='pending')
+        notifications = BookingRequest.objects.filter(
+            renter=request.user
+        ).exclude(status='pending')
 
     return render(request, 'notifications.html', {'notifications': notifications})
+
+
+@login_required
+def clear_notifications(request):
+    BookingRequest.objects.filter(
+        renter=request.user,
+        status__in=["accepted", "rejected"]
+    ).update(status="pending")
+
+    messages.success(request, "Notifications cleared.")
+    return redirect('renter_dashboard')
+
+
 
 @login_required
 def respond_request(request, request_id, action):
@@ -579,15 +569,12 @@ def respond_request(request, request_id, action):
     return redirect('notifications')
 
 
-from django.views.decorators.http import require_POST
-
 @require_POST
 @login_required
 def booking_accept(request, req_id):
     booking = get_object_or_404(BookingRequest, id=req_id, owner=request.user)
     booking.status = 'accepted'
     booking.save()
-    # Optionally send notification back to renter
     return redirect('owner_dashboard')
 
 
@@ -597,5 +584,4 @@ def booking_reject(request, req_id):
     booking = get_object_or_404(BookingRequest, id=req_id, owner=request.user)
     booking.status = 'rejected'
     booking.save()
-    # Optionally send notification back to renter
     return redirect('owner_dashboard')

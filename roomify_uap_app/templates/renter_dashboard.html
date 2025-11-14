@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/renter_dashboard_styles.css' %}" />
   </head>
   <body>
-    <!-- Navbar -->
     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
@@ -26,21 +25,47 @@
         <a href="#">My Bookings</a>
       </nav>
 
-      <div class="profile-icon">
-        <!-- Bell Icon for Notifications -->
+      <div class="profile-section">
+        <!-- Notifications -->
         <div class="notification-icon">
-          <a href="{% url 'notifications' %}" class="notification-icon">
-            <i class="bx bx-bell"></i>
-            {% if notification_count > 0 %}
-              <span class="notification-badge">{{ notification_count }}</span>
+          <i class="bx bx-bell" id="notifBell" data-dropdown="notifDropdown"></i>
+          {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+              <div class="notif-item">
+                {% if req.status == 'accepted' %}
+                  <p>
+                    <strong>{{ req.owner.username }}</strong> has
+                    <span style="color:green; font-weight:bold;">ACCEPTED</span>
+                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
+                  </p>
+                {% elif req.status == 'rejected' %}
+                  <p>
+                    <strong>{{ req.owner.username }}</strong> has
+                    <span style="color:red; font-weight:bold;">REJECTED</span>
+                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
+                  </p>
+                {% endif %}
+              </div>
+            {% empty %}
+              <p class="no-notifs">No new notifications</p>
+            {% endfor %}
+
+            {% if notifications %}
+              <form action="{% url 'clear_notifications' %}" method="POST" class="clear-form">
+                {% csrf_token %}
+                <button type="submit" class="clear-btn">Clear All</button>
+              </form>
             {% endif %}
-          </a>
+          </div>
         </div>
 
         <!-- Profile Dropdown -->
-        <div class="profile-dropdown">
+        <div class="profile-dropdown" data-dropdown="profileMenu">
           <i class="bx bx-user"></i>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id="profileMenu">
             <li>
               <a href="{% url 'renter_profile' %}">Profile</a>
             </li>
@@ -158,15 +183,34 @@
     </footer>
 
     <script>
-      const profileDropdown = document.querySelector('.profile-dropdown')
+      const dropdowns = document.querySelectorAll('[data-dropdown]')
       
-      profileDropdown.addEventListener('click', (e) => {
-        e.stopPropagation() // prevent auto-close
-        profileDropdown.classList.toggle('active')
+      dropdowns.forEach((trigger) => {
+        const dropdownId = trigger.getAttribute('data-dropdown')
+        const dropdownPanel = document.getElementById(dropdownId)
+      
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation()
+      
+          dropdowns.forEach((otherTrigger) => {
+            const otherId = otherTrigger.getAttribute('data-dropdown')
+            if (otherId !== dropdownId) {
+              document.getElementById(otherId).classList.remove('show')
+              otherTrigger.classList.remove('active')
+            }
+          })
+      
+          dropdownPanel.classList.toggle('show')
+          trigger.classList.toggle('active')
+        })
       })
       
       document.addEventListener('click', () => {
-        profileDropdown.classList.remove('active')
+        dropdowns.forEach((trigger) => {
+          const dropdownPanel = document.getElementById(trigger.getAttribute('data-dropdown'))
+          dropdownPanel.classList.remove('show')
+          trigger.classList.remove('active')
+        })
       })
     </script>
   </body>
