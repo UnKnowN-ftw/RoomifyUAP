@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="{% static 'images/roomify_favicon.png' %}"
+    />
+    <title>Roomify UAP - My Bookings</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/renter_my_bookings_styles.css' %}"
+    />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
+        <div class="logo-text">
+          <h2>Roomify UAP</h2>
+          <p>Find Your Space</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a class="active" href="{% url 'home' %}">Home</a>
+        <a href="#">Favorites</a>
+        <a href="#">My Bookings</a>
+      </nav>
+
+      <div class="profile-section">
+        <!-- Notifications -->
+        <div class="notification-icon">
+          <i
+            class="bx bx-bell"
+            id="notifBell"
+            data-dropdown="notifDropdown"
+          ></i>
+          {% if notification_count > 0 %}
+          <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+            <div class="notif-item">
+              {% if req.status == 'accepted' %}
+              <p>
+                <strong>{{ req.owner.username }}</strong> has
+                <span style="color: green; font-weight: bold">ACCEPTED</span>
+                your booking for "<strong>{{ req.listing.room_title }}</strong
+                >".
+              </p>
+              {% elif req.status == 'rejected' %}
+              <p>
+                <strong>{{ req.owner.username }}</strong> has
+                <span style="color: red; font-weight: bold">REJECTED</span>
+                your booking for "<strong>{{ req.listing.room_title }}</strong
+                >".
+              </p>
+              {% endif %}
+            </div>
+            {% empty %}
+            <p class="no-notifs">No new notifications</p>
+            {% endfor %} {% if notifications %}
+            <form
+              action="{% url 'clear_notifications' %}"
+              method="POST"
+              class="clear-form"
+            >
+              {% csrf_token %}
+              <button type="submit" class="clear-btn">Clear All</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown" data-dropdown="profileMenu">
+          <i class="bx bx-user"></i>
+          <ul class="dropdown-menu" id="profileMenu">
+            <li>
+              <a href="{% url 'renter_profile' %}">Profile</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <section class="page-header">
+      <h1>Your Bookings</h1>
+      <p>Rooms you have booked will appear here.</p>
+    </section>
+
+    <section class="booking-container">
+      {% if bookings %}
+      <div class="listing-grid">
+        {% for booking in bookings %}
+        <div class="room-card">
+          <img src="{{ booking.room.image.url }}" />
+
+          <div class="room-info">
+            <h3>{{ booking.room.title }}</h3>
+            <p>{{ booking.room.location }}</p>
+
+            <div class="details-row">
+              <span>{{ booking.room.size }} sq ft</span>
+              <span>{{ booking.room.person }} person</span>
+            </div>
+
+            <h4>৳{{ booking.room.price }}/month</h4>
+
+            <p class="status-label">
+              Status: <strong>{{ booking.status }}</strong>
+            </p>
+
+            <a href="{% url 'room_details' booking.room.id %}" class="view-btn"
+              >View Details</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty-msg">You have no bookings yet.</p>
+      {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Roomify UAP</h3>
+          <p>Empowering hostel and rental owners with smart tools.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+              <a href="#">Messages</a>
+            </li>
+            <li>
+              <a href="#">FAQ</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li>Email: support@roomifyuap.com</li>
+            <li>Phone: +8801796968195</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
+    </footer>
+
+    <script>
+      const dropdowns = document.querySelectorAll("[data-dropdown]");
+
+      dropdowns.forEach((trigger) => {
+        const dropdownId = trigger.getAttribute("data-dropdown");
+        const dropdownPanel = document.getElementById(dropdownId);
+
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+
+          dropdowns.forEach((otherTrigger) => {
+            const otherId = otherTrigger.getAttribute("data-dropdown");
+            if (otherId !== dropdownId) {
+              document.getElementById(otherId).classList.remove("show");
+              otherTrigger.classList.remove("active");
+            }
+          });
+
+          dropdownPanel.classList.toggle("show");
+          trigger.classList.toggle("active");
+        });
+      });
+
+      document.addEventListener("click", () => {
+        dropdowns.forEach((trigger) => {
+          const dropdownPanel = document.getElementById(
+            trigger.getAttribute("data-dropdown")
+          );
+          dropdownPanel.classList.remove("show");
+          trigger.classList.remove("active");
+        });
+      });
+    </script>
+  </body>
+</html>

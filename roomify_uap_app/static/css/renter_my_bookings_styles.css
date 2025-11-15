@@ -1,0 +1,493 @@
+/* ===== General Reset ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #eff4ffff;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  background-color: #4c0685;
+  padding: 25px 5%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  gap: 40px; 
+}
+
+
+.logo {
+  position: absolute;
+  left: 5%; /* keeps logo left */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logo-text h2 {
+  font-size: 1.2rem;
+  color: rgb(214, 188, 223);
+}
+
+.logo-text p {
+  font-size: 0.8rem;
+  color: white;
+  margin-top: -2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; /* space between Home, Favorites, Booking */
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 10px;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #f4a9ff;
+}
+.profile-section {
+  position: absolute;
+  right: 5%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-section i {
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.profile-section i:hover {
+  color: #f4a9ff;
+}
+
+/* ===== Notification Bell & Dropdown ===== */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.notification-icon i {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.notification-icon i:hover {
+  color: #f4a9ff;
+}
+
+.bx-bell {
+  color: white;
+  font-size: 26px;
+  transition: transform 0.2s ease;
+}
+
+.bx-bell:hover {
+  transform: scale(1.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 45px;
+  width: 320px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+/* Show dropdown with slide-down and fade */
+.notif-dropdown.show {
+  max-height: 350px;
+  opacity: 1;
+  padding: 10px 0;
+}
+
+.notif-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.no-notifs {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+.clear-form {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.clear-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #e60000;
+}
+
+
+/* ===== Profile Dropdown ===== */
+.profile-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-dropdown i {
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.profile-dropdown i:hover {
+  color: #f4a9ff;
+  transform: scale(1.1);
+}
+
+/* Dropdown panel */
+.profile-dropdown .dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: white;
+  border-radius: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+
+  min-width: 160px;
+  z-index: 999;
+}
+
+.profile-dropdown.active .dropdown-menu {
+  max-height: 300px;
+  padding: 10px 0;
+  opacity: 1;
+}
+
+.profile-dropdown .dropdown-menu li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  display: block;
+  padding: 10px 20px;
+  transition: background 0.2s ease;
+}
+
+.profile-dropdown .dropdown-menu li a:hover {
+  background-color: #f0f0f0;
+  color: #4c0685;
+}
+
+.profile-dropdown .dropdown-menu li a.active {
+  background-color: #f4a9ff;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+
+
+
+/* ===== PAGE HEADER ===== */
+
+.page-header {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    color: #222;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+
+
+/* ===== LISTINGS GRID ===== */
+
+.booking-container {
+    padding: 40px;
+}
+
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.room-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.room-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+
+
+/* ===== ROOM CARD INFO ===== */
+
+.room-info {
+    padding: 15px;
+}
+
+.room-info h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+}
+
+.room-info p {
+    margin: 6px 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.details-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 14px;
+}
+
+.room-info h4 {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #4a0c78;
+}
+
+
+
+/* ===== BOOKING STATUS ===== */
+
+.status-label {
+    margin-top: 10px;
+    font-size: 14px;
+    background: #f2e6ff;
+    color: #4a0c78;
+    padding: 6px 10px;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+
+
+/* ===== VIEW BUTTON ===== */
+
+.view-btn {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    background: #4a0c78;
+    color: white;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.view-btn:hover {
+    background: #350a5a;
+}
+
+
+
+/* ===== EMPTY MESSAGE ===== */
+
+.empty-msg {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    padding: 40px 0;
+}
+
+
+
+/* ===== Footer ===== */
+.footer {
+  background: #4c0685;
+  color: white;
+  padding: 25px 20px 10px;
+  margin-top: 50px;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-section h3,
+.footer-section h4 {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.footer-section p,
+.footer-section ul li {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li a {
+  color: #ddd;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #f4a9ff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 12px;
+  font-size: 14px;
+  border-top: 1px solid #5e3b7e;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: 1.4rem;
+  }
+
+  .listings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-dropdown .dropdown-menu {
+    right: 10px;
+    top: 40px;
+    min-width: 140px;
+  }
+
+  .profile-dropdown .dropdown-menu li {
+    padding: 8px 12px;
+  }
+
+  .profile-dropdown i {
+    font-size: 26px;
+  }
+}
