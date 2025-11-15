@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -80,22 +81,22 @@
       <div class="stats-grid">
         <div class="stat-card">
           <h3>Total Listings</h3>
-          <h2>3</h2>
-          <p>+2 this month</p>
+          <h2>{{ total_listings }}</h2>
+          <p>+{{ total_listings }} this month</p>
         </div>
         <div class="stat-card">
           <h3>Occupancy Rate</h3>
-          <h2>85%</h2>
-          <p>+5% from last month</p>
+          <h2>{{ occupancy_rate }}%</h2>
+          <p>+{{ occupancy_rate }}% from last month</p>
         </div>
         <div class="stat-card">
           <h3>Monthly Revenue</h3>
-          <h2>৳85,000</h2>
-          <p>From 18 tenants</p>
+          <h2>৳{{ monthly_revenue|intcomma }}</h2>
+          <p>From {{ total_tenants }} tenants</p>
         </div>
         <div class="stat-card">
           <h3>Total Views</h3>
-          <h2>1,284</h2>
+          <h2>{{ total_views }}</h2>
           <p>+18% this week</p>
         </div>
       </div>
@@ -217,6 +218,5 @@
         })
       })
     </script>
-
   </body>
 </html>

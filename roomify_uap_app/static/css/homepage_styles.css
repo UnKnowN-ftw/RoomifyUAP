@@ -8,25 +8,28 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background: #eff4ffff;
+  background-color: #eff4ffff;
+  color: #222;
+  line-height: 1.6;
 }
 
 .navbar {
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  /* background: #f9a1ff; */
-  background: #4c0685;
-  padding: 15px 40px;
-  color: black;
+  justify-content: flex-end;
+  background-color: #4c0685;
+  padding: 25px 5%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  gap: 40px; 
 }
 
+
 .logo {
+  position: absolute;
+  left: 5%;
   display: flex;
-  align-items: top-left;
+  align-items: center;
   gap: 10px;
 }
 
@@ -35,13 +38,17 @@ body {
   height: 55px;
   object-fit: contain;
   border-radius: 8px;
-  vertical-align: middle;
 }
 
-.logo h2 {
+.logo-text h2 {
   font-size: 1.2rem;
-  margin-bottom: 3px;
   color: rgb(214, 188, 223);
+}
+
+.logo-text p {
+  font-size: 0.8rem;
+  color: white;
+  margin-top: -2px;
 }
 
 .navbar nav a {

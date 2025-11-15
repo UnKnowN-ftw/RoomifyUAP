@@ -1,4 +1,3 @@
-/* ===== General Reset ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
@@ -29,7 +28,7 @@ body {
 
 .logo {
   position: absolute;
-  left: 5%; /* keeps logo left */
+  left: 5%;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -55,7 +54,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 25px; /* space between Home, Favorites, Booking */
+  gap: 25px;
 }
 
 .nav-links a {
@@ -97,17 +96,17 @@ body {
 }
 
 .notification-icon i {
-  font-size: 24px;
+  font-size: 26px;
   color: white;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .notification-icon i:hover {
   color: #f4a9ff;
 }
 
-.bx-bell {
+/* .bx-bell {
   color: white;
   font-size: 26px;
   transition: transform 0.2s ease;
@@ -115,7 +114,7 @@ body {
 
 .bx-bell:hover {
   transform: scale(1.1);
-}
+} */
 
 .notification-badge {
   position: absolute;
@@ -144,7 +143,7 @@ body {
   z-index: 999;
 }
 
-/* Show dropdown with slide-down and fade */
+
 .notif-dropdown.show {
   max-height: 350px;
   opacity: 1;
@@ -496,7 +495,7 @@ body {
 }
 
 .footer-section ul li a:hover {
-  color: #f4a9ff;
+  color: #ffcc33;
 }
 
 .footer-bottom {

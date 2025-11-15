@@ -5,11 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="{% static 'images/roomify_favicon.png' %}" />
-    <title>Roomify UAP - Renter Dashboard</title>
+    <title>Messages - Roomify UAP</title>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'css/renter_dashboard_styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/renter_messages_styles.css' %}" />
   </head>
   <body>
+    <!-- ===== Navbar ===== -->
     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
@@ -20,7 +21,7 @@
       </div>
 
       <nav class="nav-links">
-        <a class="active" href="{% url 'home' %}">Home</a>
+        <a href="{% url 'renter_dashboard' %}">Home</a>
         <a href="#">Favorites</a>
         <a href="{% url 'renter_bookings' %}">My Bookings</a>
       </nav>
@@ -35,30 +36,17 @@
           <div class="notif-dropdown" id="notifDropdown">
             {% for req in notifications %}
               <div class="notif-item">
-                {% if req.status == 'accepted' %}
-                  <p>
-                    <strong>{{ req.owner.username }}</strong> has
-                    <span style="color:green; font-weight:bold;">ACCEPTED</span>
-                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
-                  </p>
-                {% elif req.status == 'rejected' %}
-                  <p>
-                    <strong>{{ req.owner.username }}</strong> has
-                    <span style="color:red; font-weight:bold;">REJECTED</span>
-                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
-                  </p>
-                {% endif %}
+                <p>
+                  Your booking for "{{ req.listing.room_title }}" has been{% if req.status == 'accepted' %}
+                    <b>Accepted</b>
+                  {% else %}
+                    <b>Rejected</b>
+                  {% endif %}.
+                </p>
               </div>
             {% empty %}
               <p class="no-notifs">No new notifications</p>
             {% endfor %}
-
-            {% if notifications %}
-              <form action="{% url 'clear_notifications' %}" method="POST" class="clear-form">
-                {% csrf_token %}
-                <button type="submit" class="clear-btn">Clear All</button>
-              </form>
-            {% endif %}
           </div>
         </div>
 
@@ -67,10 +55,10 @@
           <i class="bx bx-user"></i>
           <ul class="dropdown-menu" id="profileMenu">
             <li>
-              <a href="{% url 'renter_profile' %}">Profile</a>
+              <a href="{% url 'renter_profile' %}" class="{% if current_page == 'profile' %}active{% endif %}">Profile</a>
             </li>
             <li>
-              <a href="{% url 'renter_messages' %}" class="{% if current_page == 'messages' %}active{% endif %}">Messages</a>
+              <a class="active" href="{% url 'renter_messages' %}">Messages</a>
             </li>
             <li>
               <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
@@ -80,87 +68,44 @@
       </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>Find Your Perfect Student Accommodation</h1>
-      <p>Browse through hundreds of verified hostel listings near UAP. Affordable, safe, and comfortable living spaces for students.</p>
-      <div class="search-bar">
-        <input type="text" placeholder="Search by location, area..." />
-        <select>
-          <option>Double</option>
-          <option>Single</option>
-          <option>Shared</option>
-        </select>
-        <select>
-          <option>৳5,000 - 10,000</option>
-          <option>৳10,000 - 15,000</option>
-          <option>৳15,000 - 20,000</option>
-        </select>
-        <button>Search</button>
-      </div>
+    <!-- ===== Page Header ===== -->
+    <section class="page-header">
+      <h1>Messages</h1>
+      <p>All messages from property owners will appear here.</p>
     </section>
 
-    <!-- Listings Section -->
-    <section class="listings">
-      <div class="listings-header">
-        <h2>Available Listings</h2>
-        <p>Showing hostels near UAP</p>
-        <div class="filter-controls">
-          <button class="filter-btn">Filters</button>
-          <select>
-            <option>Featured</option>
-            <option>Newest</option>
-            <option>Lowest Price</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="card-grid">
-        {% for room in listings %}
-          <div class="listing-card">
-            <div class="card-image">
-              {% if room.image %}
-                <img src="{{ room.image.url }}" alt="{{ room.room_title }}" />
-              {% else %}
-                <img src="{% static 'images/default-room.jpg' %}" alt="Default room" />
-              {% endif %}
-              <div class="fav-btn">
-                <i class="bx bx-heart"></i>
-              </div>
-            </div>
-
-            <div class="card-content">
-              <h3>{{ room.room_title }}</h3>
-              <p class="location">{{ room.location }}</p>
-              <div class="tags">
-                <span>{{ room.room_size }} sq ft</span>
-                <span>{{ room.occupancy }} person</span>
-              </div>
-              <div class="price-details">
-                <h4>৳{{ room.rent }}<span>/month</span></h4>
-              </div>
-              <a href="{% url 'view_details' room.id %}" class="details-btn">View Details</a>
-            </div>
+    <!-- ===== Messages Container ===== -->
+    <section class="messages-container">
+      {% if messages_list %}
+        {% for msg in messages_list %}
+          <div class="message-card {% if not msg.is_read %}unread{% endif %}">
+            <h4>From: {{ msg.sender.username }}</h4>
+            <p>
+              <b>Regarding:</b> {{ msg.listing.room_title }}
+            </p>
+            <p>{{ msg.content }}</p>
+            <span class="timestamp">{{ msg.timestamp|date:'M d, Y H:i' }}</span>
           </div>
-        {% empty %}
-          <p>No listings yet.</p>
         {% endfor %}
-      </div>
+      {% else %}
+        <div style="text-align:center; margin-top:50px;">
+          <b>No messages yet.</b>
+        </div>
+      {% endif %}
     </section>
 
-    <!-- Footer -->
+    <!-- ===== Footer ===== -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
           <h3>Roomify UAP</h3>
-          <p>Empowering hostel and rental owners with smart tools.</p>
+          <p>Connecting renters with properties seamlessly.</p>
         </div>
-
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
             <li>
-              <a href="{% url 'home' %}">Home</a>
+              <a href="{% url 'renter_dashboard' %}">Home</a>
             </li>
             <li>
               <a href="{% url 'renter_messages' %}">Messages</a>
@@ -170,7 +115,6 @@
             </li>
           </ul>
         </div>
-
         <div class="footer-section">
           <h4>Contact Us</h4>
           <ul>

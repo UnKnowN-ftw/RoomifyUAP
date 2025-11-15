@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/renter_profile_styles.css' %}" />
   </head>
   <body>
-    <!-- Navbar -->
     <header class="navbar">
       <div class="logo">
         <img src="{% static 'images/ROOMIFY.png' %}" alt="Logo" />
@@ -19,31 +18,61 @@
           <p>Find Your Space</p>
         </div>
       </div>
+
       <nav class="nav-links">
         <a href="{% url 'home' %}">Home</a>
         <a href="#">Favorites</a>
-        <a href="#">My Bookings</a>
+        <a href="{% url 'renter_bookings' %}">My Bookings</a>
       </nav>
-      <div class="profile-icon">
-        <!-- Bell Icon for Notifications -->
+
+      <div class="profile-section">
+        <!-- Notifications -->
         <div class="notification-icon">
-          <a href="{% url 'notifications' %}" class="notification-icon">
-            <i class="bx bx-bell"></i>
-            {% if notification_count > 0 %}
-              <span class="notification-badge">{{ notification_count }}</span>
+          <i class="bx bx-bell" id="notifBell" data-dropdown="notifDropdown"></i>
+
+          {% if notification_count > 0 %}
+            <span class="notification-badge">{{ notification_count }}</span>
+          {% endif %}
+
+          <div class="notif-dropdown" id="notifDropdown">
+            {% for req in notifications %}
+              <div class="notif-item">
+                {% if req.status == 'accepted' %}
+                  <p>
+                    <strong>{{ req.owner.username }}</strong> has
+                    <span style="color:green; font-weight:bold;">ACCEPTED</span>
+                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
+                  </p>
+                {% elif req.status == 'rejected' %}
+                  <p>
+                    <strong>{{ req.owner.username }}</strong> has
+                    <span style="color:red; font-weight:bold;">REJECTED</span>
+                    your booking for "<strong>{{ req.listing.room_title }}</strong>".
+                  </p>
+                {% endif %}
+              </div>
+            {% empty %}
+              <p class="no-notifs">No new notifications</p>
+            {% endfor %}
+
+            {% if notifications %}
+              <form action="{% url 'clear_notifications' %}" method="POST" class="clear-form">
+                {% csrf_token %}
+                <button type="submit" class="clear-btn">Clear All</button>
+              </form>
             {% endif %}
-          </a>
+          </div>
         </div>
 
         <!-- Profile Dropdown -->
-        <div class="profile-dropdown">
+        <div class="profile-dropdown" data-dropdown="profileMenu">
           <i class="bx bx-user"></i>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id="profileMenu">
             <li>
-              <a href="{% url 'renter_profile' %}">Profile</a>
+              <a class="active" href="{% url 'renter_profile' %}">Profile</a>
             </li>
             <li>
-              <a href="#">Messages</a>
+              <a href="{% url 'renter_messages' %}" class="{% if current_page == 'messages' %}active{% endif %}">Messages</a>
             </li>
             <li>
               <a href="{% url 'logout_user' %}" class="logout-link">Logout</a>
@@ -53,9 +82,7 @@
       </div>
     </header>
 
-    <!-- Profile Section -->
     <section class="profile-container">
-      <!-- Profile Header -->
       <div class="profile-header">
         <div class="user-summary">
           <img src="{% static 'images/placeholder-avatar.png' %}" alt="Avatar" class="avatar-img" />
@@ -69,6 +96,7 @@
             </p>
           </div>
         </div>
+
         <div class="stats-and-edit">
           <div class="stats-grid">
             <div class="stat-item">
@@ -92,19 +120,21 @@
         </div>
       </div>
 
-      <!-- Personal Information -->
       <section class="personal-info-section">
         <h2>Personal Information</h2>
         <p class="section-description">Manage your personal details and contact info.</p>
+
         <div class="info-grid">
           <div class="info-field">
             <label for="full-name">Full Name</label>
             <input type="text" id="full-name" placeholder="Enter your full name" />
           </div>
+
           <div class="info-field">
             <label for="email">Email Address</label>
             <input type="email" id="email" placeholder="Enter your email" />
           </div>
+
           <div class="info-field">
             <label for="phone">Phone Number</label>
             <div class="input-with-icon">
@@ -112,18 +142,22 @@
               <input type="text" id="phone" placeholder="+880 1XXXXXXXXX" />
             </div>
           </div>
+
           <div class="info-field">
             <label for="student-id">Student ID</label>
             <input type="text" id="student-id" placeholder="Enter your student ID" />
           </div>
+
           <div class="info-field">
             <label for="university">University</label>
             <input type="text" id="university" placeholder="Enter your university" />
           </div>
+
           <div class="info-field">
             <label for="program">Program/Department</label>
             <input type="text" id="program" placeholder="Enter your department or program" />
           </div>
+
           <div class="info-field full-width">
             <label for="address">Permanent Address</label>
             <div class="input-with-icon">
@@ -131,6 +165,7 @@
               <input type="text" id="address" placeholder="Village, Post, District" />
             </div>
           </div>
+
           <div class="info-field">
             <label for="dob">Date of Birth</label>
             <div class="input-with-icon">
@@ -138,10 +173,12 @@
               <input type="date" id="dob" />
             </div>
           </div>
+
           <div class="info-field">
             <label for="gender">Gender</label>
             <input type="text" id="gender" placeholder="Enter your gender" />
           </div>
+
           <div class="info-field">
             <label for="emergency">Emergency Contact</label>
             <div class="input-with-icon">
@@ -150,6 +187,7 @@
             </div>
           </div>
         </div>
+
         <div class="action-buttons">
           <button class="cancel-btn"><i class="bx bx-x"></i> Cancel</button>
           <button class="save-btn"><i class="bx bx-save"></i> Save Changes</button>
@@ -158,10 +196,10 @@
 
       <hr class="section-divider" />
 
-      <!-- Student Verification -->
       <section class="student-verification-section">
         <h2>Student Verification</h2>
         <p class="section-description">Verify your student status to access exclusive student rates.</p>
+
         <div class="verification-box">
           <i class="bx bx-info-circle info-icon"></i>
           <div class="verification-content">
@@ -180,17 +218,18 @@
             </ul>
           </div>
         </div>
+
         <button class="verify-status-btn"><i class="bx bx-lock"></i> Verify Student Status</button>
       </section>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-section">
           <h3>Roomify UAP</h3>
           <p>Empowering hostel and rental owners with smart tools.</p>
         </div>
+
         <div class="footer-section">
           <h4>Quick Links</h4>
           <ul>
@@ -198,13 +237,14 @@
               <a href="{% url 'home' %}">Home</a>
             </li>
             <li>
-              <a href="#">Messages</a>
+              <a href="{% url 'renter_messages' %}">Messages</a>
             </li>
             <li>
               <a href="#">FAQ</a>
             </li>
           </ul>
         </div>
+
         <div class="footer-section">
           <h4>Contact Us</h4>
           <ul>
@@ -213,19 +253,39 @@
           </ul>
         </div>
       </div>
+
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
 
     <script>
-      const profileDropdown = document.querySelector('.profile-dropdown')
+      const dropdowns = document.querySelectorAll('[data-dropdown]')
       
-      profileDropdown.addEventListener('click', (e) => {
-        e.stopPropagation() // prevent auto-close
-        profileDropdown.classList.toggle('active')
+      dropdowns.forEach((trigger) => {
+        const dropdownId = trigger.getAttribute('data-dropdown')
+        const dropdownPanel = document.getElementById(dropdownId)
+      
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation()
+      
+          dropdowns.forEach((otherTrigger) => {
+            const otherId = otherTrigger.getAttribute('data-dropdown')
+            if (otherId !== dropdownId) {
+              document.getElementById(otherId).classList.remove('show')
+              otherTrigger.classList.remove('active')
+            }
+          })
+      
+          dropdownPanel.classList.toggle('show')
+          trigger.classList.toggle('active')
+        })
       })
       
       document.addEventListener('click', () => {
-        profileDropdown.classList.remove('active')
+        dropdowns.forEach((trigger) => {
+          const dropdownPanel = document.getElementById(trigger.getAttribute('data-dropdown'))
+          dropdownPanel.classList.remove('show')
+          trigger.classList.remove('active')
+        })
       })
     </script>
   </body>

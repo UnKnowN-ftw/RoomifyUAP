@@ -227,6 +227,7 @@ body {
   font-size: 14px;
   display: block;
   padding: 10px 20px;
+  transition: background 0.2s ease;
 }
 
 .profile-dropdown .dropdown-menu li a.active {
@@ -434,7 +435,7 @@ body {
 }
 
 .footer-section ul li a:hover {
-  color: #ffcc33; /* Light gold accent for better visibility */
+  color: #ffcc33;
 }
 
 .footer-bottom {
@@ -453,8 +454,37 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .nav-links { display: none; }
-  .card-grid { grid-template-columns: 1fr; }
+  .nav-links {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: 1.4rem;
+  }
+
+  .listings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-dropdown .dropdown-menu {
+    right: 10px;
+    top: 40px;
+    min-width: 140px;
+  }
+
+  .profile-dropdown .dropdown-menu li {
+    padding: 8px 12px;
+  }
+
+  .profile-dropdown i {
+    font-size: 26px;
+  }
 }

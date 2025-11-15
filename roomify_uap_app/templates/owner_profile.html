@@ -25,11 +25,10 @@
         <a href="{% url 'owner_analytics' %}" class="{% if current_page == 'analytics' %}active{% endif %}">Analytics</a>
       </nav>
 
-      <!-- Profile + Notifications Section -->
       <div class="profile-section">
         <!-- Notification Bell -->
         <div class="notification-icon">
-          <i class="bx bx-bell" id="notifBell"></i>
+          <i class="bx bx-bell" id="notifBell" data-dropdown="notifDropdown"></i>
           {% if notification_count > 0 %}
             <span class="notification-badge">{{ notification_count }}</span>
           {% endif %}
@@ -55,9 +54,9 @@
         </div>
 
         <!-- Profile Dropdown -->
-        <div class="profile-dropdown">
+        <div class="profile-dropdown" data-dropdown="profileMenu">
           <i class="bx bx-user"></i>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id="profileMenu">
             <li><a class="active" href="{% url 'owner_profile' %}">Profile</a></li>
             <li><a href="{% url 'owner_messages' %}" class="{% if current_page == 'messages' %}active{% endif %}">Messages</a></li>
             <li><a href="{% url 'logout_user' %}" class="logout-link">Logout</a></li>
@@ -211,24 +210,36 @@
       <div class="footer-bottom">© 2025 Roomify UAP | All rights reserved</div>
     </footer>
 
-    <!-- ===== SCRIPTS ===== -->
     <script>
-      // Profile dropdown toggle
-      const profileDropdown = document.querySelector('.profile-dropdown');
-      profileDropdown.addEventListener('click', e => {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('active');
-      });
-      document.addEventListener('click', () => profileDropdown.classList.remove('active'));
-
-      // Notification dropdown toggle
-      const notifBell = document.getElementById('notifBell');
-      const notifDropdown = document.getElementById('notifDropdown');
-      notifBell.addEventListener('click', e => {
-        e.stopPropagation();
-        notifDropdown.classList.toggle('show');
-      });
-      document.addEventListener('click', () => notifDropdown.classList.remove('show'));
+      const dropdowns = document.querySelectorAll('[data-dropdown]')
+      
+      dropdowns.forEach((trigger) => {
+        const dropdownId = trigger.getAttribute('data-dropdown')
+        const dropdownPanel = document.getElementById(dropdownId)
+      
+        trigger.addEventListener('click', (e) => {
+          e.stopPropagation()
+      
+          dropdowns.forEach((otherTrigger) => {
+            const otherId = otherTrigger.getAttribute('data-dropdown')
+            if (otherId !== dropdownId) {
+              document.getElementById(otherId).classList.remove('show')
+              otherTrigger.classList.remove('active')
+            }
+          })
+      
+          dropdownPanel.classList.toggle('show')
+          trigger.classList.toggle('active')
+        })
+      })
+      
+      document.addEventListener('click', () => {
+        dropdowns.forEach((trigger) => {
+          const dropdownPanel = document.getElementById(trigger.getAttribute('data-dropdown'))
+          dropdownPanel.classList.remove('show')
+          trigger.classList.remove('active')
+        })
+      })
     </script>
   </body>
 </html>

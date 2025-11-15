@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -17,17 +17,21 @@ body {
 /* Header */
 /* ===== Navbar ===== */
 .navbar {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center; 
+  align-items: center;
+  justify-content: center;
   background-color: #4c0685;
-  padding: 15px 5%;
-  box-shadow: 0 2px 4px rgb(253, 252, 252);
+  padding: 25px 5%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  gap: 40px;
 }
 
 .logo {
+  position: absolute;
+  left: 5%;
   display: flex;
-  align-items: top-left;
+  align-items: center;
   gap: 10px;
 }
 
@@ -36,44 +40,208 @@ body {
   height: 55px;
   object-fit: contain;
   border-radius: 8px;
-  vertical-align: middle;
 }
 
-.logo h2 {
+.logo-text h2 {
   font-size: 1.2rem;
-  margin-bottom: 3px;
   color: rgb(214, 188, 223);
 }
 
-.logo p {
+.logo-text p {
   font-size: 0.8rem;
   color: white;
+  margin-top: -2px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
 }
 
 .nav-links a {
-  margin: 0 15px;
   color: white;
   text-decoration: none;
   font-weight: 500;
+  padding: 5px 10px;
+  transition: color 0.2s ease;
 }
 
-.nav-links a:hover {
-  color: white;
+.nav-links a:hover,
+.nav-links a.active {
+  color: #f4a9ff;
 }
 
-.profile-icon img {
-  border-radius: 50%;
+.profile-section {
+  position: absolute;
+  right: 5%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-.profile-icon i {
-  font-size: 32px;
+/* ===== Notification Bell & Dropdown ===== */
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.notification-icon i {
+  font-size: 24px;
   color: white;
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.profile-icon i:hover {
+.notification-icon i:hover {
+  color: #f4a9ff;
+}
+
+.bx-bell {
   color: white;
+  font-size: 26px;
+  transition: transform 0.2s ease;
+}
+
+.bx-bell:hover {
+  transform: scale(1.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 45px;
+  width: 320px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+/* Show dropdown with slide-down and fade */
+.notif-dropdown.show {
+  max-height: 350px;
+  opacity: 1;
+  padding: 10px 0;
+}
+
+.notif-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.notif-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn,
+.reject-btn {
+  padding: 6px 12px;
+  border: none;
+  font-size: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.accept-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.no-notifs {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Profile dropdown */
+.profile-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-dropdown i {
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.profile-dropdown i:hover {
+  color: #f4a9ff;
+  transform: scale(1.1);
+}
+
+.profile-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  list-style: none;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 100;
+}
+
+.profile-dropdown.active .dropdown-menu {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.profile-dropdown .dropdown-menu li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  display: block;
+  padding: 10px 20px;
+  transition: background 0.2s ease;
+}
+
+.profile-dropdown .dropdown-menu li a.active {
+  background-color: #f4a9ff;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.profile-dropdown .dropdown-menu li a:hover {
+  background-color: #f0f0f0;
+  color: #4c0685;
 }
 
 /* Main */
@@ -141,19 +309,17 @@ body {
 
 .footer {
   background: #4c0685;
-  color: white;
-  padding: 40px 20px 15px;
+  color: #f4f4f4;
+  padding: 25px 20px 10px;
   margin-top: 50px;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 .footer-content {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 30px;
   max-width: 1200px;
   margin: auto;
-  gap: 20px;
 }
 
 .footer-section {
@@ -163,39 +329,56 @@ body {
 
 .footer-section h3,
 .footer-section h4 {
+  color: #ffffff;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
-.footer-section p {
-  font-size: 14px;
-  line-height: 1.6;
+.footer-section p,
+.footer-section li {
+  color: #e0d7ef;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
 }
 
 .footer-section ul {
   list-style: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin: 6px 0;
-  font-size: 14px;
+  padding-left: 0;
 }
 
 .footer-section ul li a {
-  color: #ddd;
+  color: #e0d7ef;
   text-decoration: none;
-  transition: 0.3s;
+  transition: color 0.2s ease;
 }
 
 .footer-section ul li a:hover {
-  color: #f4a9ff;
+  color: #ffcc33;
 }
-
 .footer-bottom {
   text-align: center;
   margin-top: 25px;
   padding-top: 12px;
-  font-size: 14px;
   border-top: 1px solid #5e3b7e;
+  color: #dcd2e8;
+  font-size: 0.9rem;
+}
+
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .nav-links {
+    display: none;
+  }
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px);}
+  to { opacity: 1; transform: translateY(0);}
 }

@@ -10,18 +10,20 @@ urlpatterns = [
 
     path('dashboard/renter/', views.renter_dashboard, name='renter_dashboard'),
     path('dashboard/renter/profile/', views.renter_profile, name='renter_profile'),
+    path('dashboard/renter/bookings/', views.renter_my_bookings, name='renter_bookings'),
+    path('dashboard/renter/messages/', views.renter_messages, name='renter_messages'),
 
 
     path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
-    path('owner/listings/', views.owner_listings, name='owner_listings'),
-    path('owner/analytics/', views.owner_analytics, name='owner_analytics'),
-    path('owner/messages/', views.owner_messages, name='owner_messages'),
+    path('dashboard/owner/listings/', views.owner_listings, name='owner_listings'),
+    path('dashboard/owner/analytics/', views.owner_analytics, name='owner_analytics'),
+    path('dashboard/owner/messages/', views.owner_messages, name='owner_messages'),
     path('send-message/<int:listing_id>/', views.send_message, name='send_message'),
     path('dashboard/owner/profile/', views.owner_profile, name='owner_profile'),
-    path('post-new-listing/', views.post_new_listing, name='post_new_listing'),
-    path('owner/listing/edit/<int:listing_id>/', views.edit_listing, name='edit_listing'),
-    path('owner/listing/view/<int:listing_id>/', views.view_listing, name='view_listing'),
-    path('listing/<int:listing_id>/delete/', views.delete_listing, name='delete_listing'),
+    path('dashboard/owner/post-new-listing/', views.post_new_listing, name='post_new_listing'),
+    path('dashboard/owner/listing/edit/<int:listing_id>/', views.edit_listing, name='edit_listing'),
+    path('dashboard/owner/listing/view/<int:listing_id>/', views.view_listing, name='view_listing'),
+    path('dashboard/owner/listing/delete/<int:listing_id>/', views.delete_listing, name='delete_listing'),
 
 
     path('dashboard/admin/login/', views.admin_login, name='admin_login'),

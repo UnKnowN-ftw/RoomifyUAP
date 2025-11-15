@@ -1,4 +1,3 @@
-/* ===== General Reset ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
@@ -12,6 +11,7 @@ body {
   background-color: #eff4ffff;
   color: #222;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* ===== Navbar ===== */
@@ -29,7 +29,7 @@ body {
 
 .logo {
   position: absolute;
-  left: 5%; /* keeps logo left */
+  left: 5%;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -55,7 +55,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 25px; /* space between Home, Favorites, Booking */
+  gap: 25px;
 }
 
 .nav-links a {
@@ -97,23 +97,14 @@ body {
 }
 
 .notification-icon i {
-  font-size: 24px;
+  font-size: 26px;
   color: white;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .notification-icon i:hover {
   color: #f4a9ff;
-}
-
-.bx-bell {
-  color: white;
-  font-size: 26px;
-  transition: transform 0.2s ease;
-}
-
-.bx-bell:hover {
   transform: scale(1.1);
 }
 
@@ -144,7 +135,7 @@ body {
   z-index: 999;
 }
 
-/* Show dropdown with slide-down and fade */
+
 .notif-dropdown.show {
   max-height: 350px;
   opacity: 1;
@@ -209,37 +200,28 @@ body {
   cursor: pointer;
   transition: color 0.2s ease, transform 0.2s ease;
 }
-
 .profile-dropdown i:hover {
   color: #f4a9ff;
   transform: scale(1.1);
 }
 
-/* Dropdown panel */
 .profile-dropdown .dropdown-menu {
+  display: none;
   position: absolute;
   right: 0;
-  top: 40px;
+  top: 35px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
   list-style: none;
-  padding: 0;
-  margin: 0;
-
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-
-  min-width: 160px;
-  z-index: 999;
+  padding: 10px 0;
+  min-width: 150px;
+  z-index: 100;
 }
 
 .profile-dropdown.active .dropdown-menu {
-  max-height: 300px;
-  padding: 10px 0;
-  opacity: 1;
+  display: block;
+  animation: fadeIn 0.2s ease;
 }
 
 .profile-dropdown .dropdown-menu li a {
@@ -248,7 +230,14 @@ body {
   font-size: 14px;
   display: block;
   padding: 10px 20px;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.profile-dropdown .dropdown-menu li a.active {
+  background-color: #f4a9ff;
+  color: #222;
+  font-weight: 600;
+  border-radius: 4px;
 }
 
 .profile-dropdown .dropdown-menu li a:hover {
@@ -256,150 +245,64 @@ body {
   color: #4c0685;
 }
 
-.profile-dropdown .dropdown-menu li a.active {
+.profile-dropdown .dropdown-menu li a.active:hover {
+  box-shadow: 0 0 10px 2px #9b59b6;
   background-color: #f4a9ff;
-  color: white;
-  font-weight: 600;
-  border-radius: 4px;
+  color: #222;
 }
 
-
-
-
-/* ===== PAGE HEADER ===== */
-
+/* ===== Page Header ===== */
 .page-header {
-    text-align: center;
-    padding-top: 40px;
+  text-align: center;
+  padding: 40px 20px 20px;
 }
 
 .page-header h1 {
-    font-size: 32px;
-    color: #222;
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
 .page-header p {
-    color: #666;
-    font-size: 15px;
-    margin-top: 5px;
+  font-size: 1rem;
+  color: #555;
 }
 
-
-
-/* ===== LISTINGS GRID ===== */
-
-.booking-container {
-    padding: 40px;
+/* ===== Messages Section ===== */
+.messages-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.listing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
+.message-card {
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  word-wrap: break-word;
 }
 
-.room-card {
-    background: white;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-    transition: 0.3s ease;
+.message-card h4 {
+  color: #4c0685;
+  margin-bottom: 8px;
 }
 
-.room-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+.message-card p {
+  color: #333;
+  margin-bottom: 12px;
 }
 
-.room-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+.message-card .timestamp {
+  display: block;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 10px;
 }
-
-
-
-/* ===== ROOM CARD INFO ===== */
-
-.room-info {
-    padding: 15px;
-}
-
-.room-info h3 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #222;
-}
-
-.room-info p {
-    margin: 6px 0;
-    color: #666;
-    font-size: 15px;
-}
-
-.details-row {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    color: #666;
-    font-size: 14px;
-}
-
-.room-info h4 {
-    margin-top: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #4a0c78;
-}
-
-
-
-/* ===== BOOKING STATUS ===== */
-
-.status-label {
-    margin-top: 10px;
-    font-size: 14px;
-    background: #f2e6ff;
-    color: #4a0c78;
-    padding: 6px 10px;
-    border-radius: 6px;
-    width: fit-content;
-}
-
-
-
-/* ===== VIEW BUTTON ===== */
-
-.view-btn {
-    display: block;
-    margin-top: 14px;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    text-decoration: none;
-    background: #4a0c78;
-    color: white;
-    font-weight: 500;
-    transition: 0.2s ease;
-}
-
-.view-btn:hover {
-    background: #350a5a;
-}
-
-
-
-/* ===== EMPTY MESSAGE ===== */
-
-.empty-msg {
-    text-align: center;
-    font-size: 16px;
-    color: #777;
-    padding: 40px 0;
-}
-
-
 
 /* ===== Footer ===== */
 .footer {
@@ -451,8 +354,8 @@ body {
 
 .footer-bottom {
   text-align: center;
-  margin-top: 25px;
-  padding-top: 12px;
+  margin-top: 20px;
+  padding-top: 8px;
   font-size: 14px;
   border-top: 1px solid #5e3b7e;
 }
@@ -462,20 +365,12 @@ body {
   .nav-links {
     display: none;
   }
-
-  .hero h1 {
-    font-size: 1.4rem;
+  
+  .messages-container {
+    padding: 10px;
+    margin: 20px auto;
   }
 
-  .listings-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
 
   .profile-dropdown .dropdown-menu {
     right: 10px;

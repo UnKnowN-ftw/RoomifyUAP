@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Profile, Listing, ListingView, Message
+from .models import Profile, Listing, ListingView, Message, BookingRequest
 from .models import Owner, Renter
 from datetime import datetime
-from .models import BookingRequest
-from django.db.models import Count
+from django.db.models import Count, Sum
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 
@@ -56,24 +56,63 @@ def renter_dashboard(request):
 
 
 @login_required
-def owner_dashboard(request):
+def renter_my_bookings(request):
     profile = Profile.objects.filter(user=request.user).first()
-    if not profile or profile.role != 'owner':
-        messages.error(request, 'Access denied.')
-        return redirect('home')
+    if not profile or profile.role != "renter":
+        messages.error(request, "Access denied.")
+        return redirect("home")
 
-    owner_listings = Listing.objects.filter(owner=request.user).order_by('-created_at')
+    bookings = BookingRequest.objects.filter(
+        renter=request.user
+    ).select_related("listing", "owner").order_by("-created_at")
 
     notifications = BookingRequest.objects.filter(
-        owner=request.user,
-        status='pending'
-    )
+        renter=request.user,
+        status__in=["accepted", "rejected"]
+    ).order_by("-created_at")
 
     context = {
-        'profile': profile,
-        'listings': owner_listings,
+        "bookings": bookings,
+        "notifications": notifications,
+        "notification_count": notifications.count(),
+    }
+
+    return render(request, "renter_my_bookings.html", context)
+
+
+@login_required
+@role_required('owner')
+def owner_dashboard(request):
+    owner = request.user
+    listings = Listing.objects.filter(owner=owner)
+
+    total_listings = listings.count()
+
+    occupied_rooms = listings.filter(occupied=True).count()
+    occupancy_rate = round((occupied_rooms / total_listings) * 100, 2) if total_listings > 0 else 0
+
+    now = timezone.now()
+    accepted_bookings = BookingRequest.objects.filter(
+        owner=owner,
+        status='accepted',
+        created_at__year=now.year,
+        created_at__month=now.month
+    )
+    monthly_revenue = accepted_bookings.aggregate(total=Sum('listing__rent'))['total'] or 0
+
+    total_views = ListingView.objects.filter(listing__in=listings).count()
+
+    notifications = BookingRequest.objects.filter(owner=owner, status='pending')
+    notification_count = notifications.count()
+
+    context = {
+        'listings': listings,
+        'total_listings': total_listings,
+        'occupancy_rate': occupancy_rate,
+        'monthly_revenue': monthly_revenue,
+        'total_views': total_views,
         'notifications': notifications,
-        'notification_count': notifications.count(),
+        'notification_count': notification_count,
     }
 
     return render(request, 'owner_dashboard.html', context)
@@ -205,19 +244,30 @@ def send_message(request, listing_id):
 @login_required
 @role_required('owner')
 def owner_listings(request):
-    """Display all listings posted by the currently logged-in owner."""
+    """Display all listings posted by the currently logged-in owner with notifications."""
     profile = Profile.objects.filter(user=request.user).first()
     if not profile or profile.role != 'owner':
         messages.error(request, "Access denied.")
         return redirect('home')
 
     listings = Listing.objects.filter(owner=request.user).order_by('-created_at')
-    return render(request, 'owner_listings.html', {'listings': listings})
+
+    notifications = BookingRequest.objects.filter(owner=request.user, status='pending')
+    notification_count = notifications.count()
+
+    context = {
+        'listings': listings,
+        'notifications': notifications,
+        'notification_count': notification_count,
+    }
+
+    return render(request, 'owner_listings.html', context)
 
 
 @login_required
 @role_required('owner')
 def owner_analytics(request):
+    """Display analytics for owner with notifications included."""
     owner = request.user
     listings = Listing.objects.filter(owner=owner)
 
@@ -248,13 +298,18 @@ def owner_analytics(request):
     labels = [v['day'].strftime("%b %d") for v in monthly_views]
     daily_views = [v['count'] for v in monthly_views]
 
+    notifications = BookingRequest.objects.filter(owner=request.user, status='pending')
+    notification_count = notifications.count()
+
     context = {
         'total_views': total_views,
         'total_revenue': total_revenue,
         'occupancy_rate': occupancy_rate,
         'total_messages': total_messages,
         'labels': labels,
-        'daily_views': daily_views
+        'daily_views': daily_views,
+        'notifications': notifications,
+        'notification_count': notification_count,
     }
 
     return render(request, 'owner_analytics.html', context)
@@ -272,8 +327,17 @@ def owner_messages(request):
 
     messages_received = Message.objects.filter(receiver=request.user).select_related('sender', 'listing').order_by('-timestamp')
     messages_received.update(is_read=True)
+    
+    notifications = BookingRequest.objects.filter(owner=request.user, status='pending')
+    notification_count = notifications.count()
 
-    return render(request, 'owner_messages.html', {'messages_list': messages_received})
+    context = {
+        'messages_list': messages_received,
+        'notifications': notifications,
+        'notification_count': notification_count,
+    }
+
+    return render(request, 'owner_messages.html', context)
 
 @login_required
 @role_required('owner')
@@ -283,6 +347,9 @@ def post_new_listing(request):
         messages.error(request, "Access denied.")
         return redirect('home')
 
+    notifications = BookingRequest.objects.filter(owner=request.user, status='pending')
+    notification_count = notifications.count()
+
     if request.method == 'POST':
         room_title = request.POST.get('room_title')
         location = request.POST.get('location')
@@ -291,7 +358,6 @@ def post_new_listing(request):
         occupancy = request.POST.get('occupancy')
         description = request.POST.get('description')
         image = request.FILES.get('images')
-        
 
         if not room_title or not location or not rent:
             messages.error(request, 'Please fill required fields.')
@@ -309,9 +375,14 @@ def post_new_listing(request):
         )
 
         messages.success(request, 'Listing posted successfully.')
-        return redirect('renter_dashboard')
+        return redirect('owner_dashboard')
 
-    return render(request, 'post_new_listing.html')
+    context = {
+        'notifications': notifications,
+        'notification_count': notification_count
+    }
+
+    return render(request, 'post_new_listing.html', context)
 
 
 
@@ -513,11 +584,100 @@ def view_details(request, room_id):
     return render(request, 'view_details.html', {'room': room})
 
 
-def renter_profile(request):
-    return render(request, 'renter_profile.html')
+@login_required
+@role_required('renter')
+def renter_messages(request):
+    profile = Profile.objects.filter(user=request.user).first()
+    if not profile or profile.role != 'renter':
+        messages.error(request, "Access denied.")
+        return redirect('home')
 
+    messages_received = Message.objects.filter(receiver=request.user).select_related('sender', 'listing').order_by('-timestamp')
+    messages_received.update(is_read=True)
+
+    notifications = BookingRequest.objects.filter(
+        renter=request.user
+    ).exclude(status='pending')
+
+    context = {
+        'messages_list': messages_received,
+        'notifications': notifications,
+        'notification_count': notifications.count(),
+        'current_page': 'messages',
+    }
+
+    return render(request, 'renter_messages.html', context)
+
+
+@login_required
+@role_required('renter')
+def renter_profile(request):
+    profile = Profile.objects.filter(user=request.user).first()
+    renter = Renter.objects.filter(user=request.user).first()
+
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name', request.user.first_name)
+        request.user.last_name = request.POST.get('last_name', request.user.last_name)
+        request.user.email = request.POST.get('email', request.user.email)
+        request.user.save()
+
+        profile.phone = request.POST.get('phone', profile.phone)
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('renter_profile')
+
+    notifications = BookingRequest.objects.filter(
+        renter=request.user
+    ).exclude(status='pending')
+
+    context = {
+        'profile': profile,
+        'renter': renter,
+        'notifications': notifications,
+        'notification_count': notifications.count(),
+        'current_page': 'profile',
+    }
+
+    return render(request, 'renter_profile.html', context)
+
+
+@login_required
+@role_required('owner')
 def owner_profile(request):
-    return render(request, 'owner_profile.html')
+    profile = Profile.objects.filter(user=request.user).first()
+    owner = Owner.objects.filter(user=request.user).first()
+
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name', request.user.first_name)
+        request.user.last_name = request.POST.get('last_name', request.user.last_name)
+        request.user.email = request.POST.get('email', request.user.email)
+        request.user.save()
+
+        profile.phone = request.POST.get('phone', profile.phone)
+        profile.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('owner_profile')
+
+    listings = Listing.objects.filter(owner=request.user)
+    total_properties = listings.count()
+    occupied_rooms = listings.filter(occupied=True).count()
+    occupancy_rate = round((occupied_rooms / total_properties) * 100, 2) if total_properties > 0 else 0
+
+    context = {
+        'profile': profile,
+        'owner': owner,
+        'total_properties': total_properties,
+        'total_rooms': total_properties,
+        'occupancy_rate': occupancy_rate,
+        'notifications': BookingRequest.objects.filter(owner=request.user, status='pending'),
+        'notification_count': BookingRequest.objects.filter(owner=request.user, status='pending').count(),
+    }
+
+    return render(request, 'owner_profile.html', context)
+
+
 
 
 @login_required
