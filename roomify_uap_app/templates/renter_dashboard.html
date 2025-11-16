@@ -21,7 +21,6 @@
 
       <nav class="nav-links">
         <a class="active" href="{% url 'home' %}">Home</a>
-        <a href="#">Favorites</a>
         <a href="{% url 'renter_bookings' %}">My Bookings</a>
       </nav>
 
@@ -105,14 +104,6 @@
       <div class="listings-header">
         <h2>Available Listings</h2>
         <p>Showing hostels near UAP</p>
-        <div class="filter-controls">
-          <button class="filter-btn">Filters</button>
-          <select>
-            <option>Featured</option>
-            <option>Newest</option>
-            <option>Lowest Price</option>
-          </select>
-        </div>
       </div>
 
       <div class="card-grid">
@@ -124,9 +115,6 @@
               {% else %}
                 <img src="{% static 'images/default-room.jpg' %}" alt="Default room" />
               {% endif %}
-              <div class="fav-btn">
-                <i class="bx bx-heart"></i>
-              </div>
             </div>
 
             <div class="card-content">
